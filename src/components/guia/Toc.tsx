@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 
 export const TOC_ITEMS = [
   { id: 'isencoes', label: 'O que são as isenções' },
+  { id: 'ipva', label: 'IPVA: isenção total, todo ano' },
   { id: 'quem-pode', label: 'Quem pode' },
   { id: 'carro', label: 'Qual carro pode' },
   { id: 'etapas', label: 'As 7 etapas, órgão por órgão' },

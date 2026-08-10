@@ -123,6 +123,10 @@ export const profiles = mysqlTable(
       unsigned: true,
     }).references(() => vehicles.id),
     intendedPrice: int("intendedPrice"),
+    /** Data da compra do veículo (NF-e) — ativa o lembrete do prazo SIVEI IPVA */
+    purchaseDate: date("purchaseDate", { mode: "string" }),
+    /** Dígito final da placa — ativa o lembrete de licenciamento */
+    plateFinalDigit: varchar("plateFinalDigit", { length: 1 }),
     updatedAt: timestamp("updatedAt")
       .defaultNow()
       .notNull()

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Check, ChevronDown, FileText, Lock, Send, Upload } from 'lucide-react';
-import { STAGES, type Stage, type StageStatus } from '@contracts/constants';
+import { IPVA_FIRST_YEAR_NOTE, IPVA_TRIGGERS, IPVA_ZERO_KM_DEADLINE_DAYS, STAGES, type Stage, type StageStatus } from '@contracts/constants';
 import { cn } from '@/lib/utils';
 import { formatDate, formatDateTime, STAGE_STATUS, docLabel } from './client-utils';
 import StatusChip from './StatusChip';
@@ -39,6 +39,7 @@ const STAGE_DESCRIPTIONS: Record<number, string> = {
   5: 'Pedido de isenção de IPI na Receita Federal (SISEN).',
   6: 'Autorização de isenção de ICMS na Sefaz-SP (SIVEI).',
   7: 'Compra do veículo e comprovação pós-compra em até 60 dias.',
+  8: 'Isenção de IPVA na Sefaz-SP — total, todo ano, mas com gatilhos.',
 };
 
 function isLocked(def: Stage, rows: Map<number, StageRow>): { locked: boolean; waitingOn?: number } {
@@ -220,6 +221,33 @@ function StageItem({
                     <Upload className="h-4 w-4" /> Registrar nota fiscal
                   </Link>
                 )}
+                {def.n === 8 && (
+                  <div className="space-y-3">
+                    <div className="rounded-xl border border-warn-amber/40 bg-warn-amber/10 p-3 text-sm text-text-primary">
+                      <strong className="text-warn-amber">Prazo duro:</strong> carro 0 km — se a isenção não sair
+                      automática, o pedido no SIVEI deve ser feito em até{' '}
+                      <strong>{IPVA_ZERO_KM_DEADLINE_DAYS} dias da NF-e</strong>.
+                    </div>
+                    <div className="rounded-xl border border-alert-red/40 bg-alert-red/10 p-3 text-sm">
+                      <p className="font-semibold text-alert-red">A isenção cai automaticamente se:</p>
+                      <ul className="mt-1.5 list-disc space-y-1 pl-5 text-text-primary/90">
+                        {IPVA_TRIGGERS.map((t) => (
+                          <li key={t}>{t}</li>
+                        ))}
+                      </ul>
+                      <p className="mt-1.5 text-xs text-text-faint">
+                        Nesses casos a Sefaz cobra o IPVA proporcional dos meses restantes do ano.
+                      </p>
+                    </div>
+                    <p className="text-[0.8125rem] leading-relaxed text-text-muted">{IPVA_FIRST_YEAR_NOTE}</p>
+                    <Link
+                      to="/guia#ipva"
+                      className="inline-flex items-center gap-1.5 text-sm font-medium text-taxi-yellow transition-colors hover:text-taxi-yellow-hover"
+                    >
+                      Ver o guia completo do IPVA
+                    </Link>
+                  </div>
+                )}
                 {locked && waitingOn !== undefined && (
                   <p className="text-sm text-text-faint">
                     Depende da etapa {waitingOn} — assim que concluir, protocolamos automaticamente.
@@ -234,7 +262,7 @@ function StageItem({
   );
 }
 
-/** Timeline vertical das 7 etapas (3 e 4 em paralelo dentro de container tracejado) */
+/** Timeline vertical das 8 etapas (3 e 4 em paralelo dentro de container tracejado) */
 export default function StageTimeline({
   rows,
   currentStage,
@@ -317,7 +345,8 @@ export default function StageTimeline({
       </div>
       {renderItem(5, false)}
       {renderItem(6, false)}
-      {renderItem(7, true)}
+      {renderItem(7, false)}
+      {renderItem(8, true)}
     </div>
   );
 }

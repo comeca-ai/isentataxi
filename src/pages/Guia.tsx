@@ -4,6 +4,7 @@ import ReadingProgress from '@/components/guia/ReadingProgress';
 import Toc from '@/components/guia/Toc';
 import GuiaHero from '@/components/guia/GuiaHero';
 import SectionIsencoes from '@/components/guia/SectionIsencoes';
+import SectionIpva from '@/components/guia/SectionIpva';
 import SectionQuemPode from '@/components/guia/SectionQuemPode';
 import SectionCarro from '@/components/guia/SectionCarro';
 import SectionEtapas from '@/components/guia/SectionEtapas';
@@ -46,6 +47,7 @@ export default function Guia() {
         <article className="min-w-0 max-w-[720px]">
           <GuiaHero />
           <SectionIsencoes />
+          <SectionIpva />
           <SectionQuemPode />
           <SectionCarro />
           <SectionEtapas />

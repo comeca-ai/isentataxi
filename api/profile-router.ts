@@ -24,6 +24,12 @@ const profileInput = z.object({
   state: z.string().length(2).default("SP"),
   intendedVehicleId: z.number().int().positive().optional().nullable(),
   intendedPrice: z.number().int().positive().optional().nullable(),
+  purchaseDate: z.string().optional().nullable(),
+  plateFinalDigit: z
+    .string()
+    .regex(/^[0-9]$/, "Final de placa inválido")
+    .optional()
+    .nullable(),
 });
 
 export const profileRouter = createRouter({
@@ -48,6 +54,8 @@ export const profileRouter = createRouter({
       complement: input.complement ?? null,
       intendedVehicleId: input.intendedVehicleId ?? null,
       intendedPrice: input.intendedPrice ?? null,
+      purchaseDate: input.purchaseDate ?? null,
+      plateFinalDigit: input.plateFinalDigit ?? null,
       userId: ctx.user.id,
       updatedAt: new Date(),
     };

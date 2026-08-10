@@ -50,6 +50,21 @@ async function ensureProcess(userId: number) {
     .where(eq(processStages.processId, process.id))
     .orderBy(asc(processStages.stage));
 
+  // Backfill: processos antigos podem não ter etapas novas (ex.: etapa 8 IPVA)
+  const missing = STAGES.filter((def) => !stages.some((s) => s.stage === def.n));
+  if (missing.length > 0) {
+    await db
+      .insert(processStages)
+      .values(missing.map((def) => ({ processId: process.id, stage: def.n, status: "pendente" as const })))
+      .onDuplicateKeyUpdate({ set: { updatedAt: new Date() } });
+    const refreshed = await db
+      .select()
+      .from(processStages)
+      .where(eq(processStages.processId, process.id))
+      .orderBy(asc(processStages.stage));
+    return { process, stages: refreshed };
+  }
+
   return { process, stages };
 }
 
@@ -86,7 +101,7 @@ export const processRouter = createRouter({
     .input(
       z.object({
         processId: z.number().int().positive(),
-        stage: z.number().int().min(1).max(7),
+        stage: z.number().int().min(1).max(STAGES.length),
         status: stageStatusEnum,
         notes: z.string().max(2000).optional(),
       }),
@@ -153,7 +168,7 @@ export const processRouter = createRouter({
         .where(eq(processStages.processId, input.processId))
         .orderBy(asc(processStages.stage));
       const current =
-        stages.find((s) => s.status !== "concluida")?.stage ?? 7;
+        stages.find((s) => s.status !== "concluida")?.stage ?? STAGES.length;
       await db
         .update(processes)
         .set({ currentStage: current, updatedAt: new Date() })

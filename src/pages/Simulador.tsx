@@ -4,7 +4,7 @@ import { BadgePercent, Info, Landmark } from 'lucide-react';
 import { useSearchParams } from 'react-router';
 import { keepPreviousData } from '@tanstack/react-query';
 import type { FuelType } from '@contracts/constants';
-import { IPI_RATES, TETO_PRECO } from '@contracts/constants';
+import { IPI_RATES, IPVA_FIRST_YEAR_NOTE, IPVA_RATE, TETO_PRECO } from '@contracts/constants';
 import Eyebrow from '@/components/Eyebrow';
 import { Toaster } from '@/components/ui/sonner';
 import { trpc } from '@/providers/trpc';
@@ -122,7 +122,7 @@ export default function Simulador() {
   });
 
   const server = calcQuery.data;
-  const displayed = server
+  const base = server
     ? {
         price: server.price,
         ipiRate: server.ipiRate,
@@ -132,6 +132,11 @@ export default function Simulador() {
         finalPrice: server.finalPrice,
       }
     : local;
+  const displayed = {
+    ...base,
+    ipvaAnnual: server?.ipvaAnnual ?? Math.round(base.price * IPVA_RATE),
+    ipvaNote: server?.ipvaNote ?? IPVA_FIRST_YEAR_NOTE,
+  };
 
   const tetoMessage = `A isenção vale para carros de até R$ ${TETO_PRECO.toLocaleString('pt-BR')}. Este valor passa do teto — fale com a gente no WhatsApp para avaliar seu caso.`;
   const error = overLimit ? (calcQuery.error?.message ?? tetoMessage) : null;

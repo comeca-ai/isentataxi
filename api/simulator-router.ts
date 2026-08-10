@@ -5,6 +5,8 @@ import {
   FUEL_TYPES,
   ICMS_RATE,
   IPI_RATES,
+  IPVA_FIRST_YEAR_NOTE,
+  IPVA_RATE,
   TETO_PRECO,
   type FuelType,
 } from "@contracts/constants";
@@ -80,6 +82,8 @@ export const simulatorRouter = createRouter({
         icmsValue,
         totalSavings,
         finalPrice: brl(price - totalSavings),
+        ipvaAnnual: Math.round(price * IPVA_RATE),
+        ipvaNote: IPVA_FIRST_YEAR_NOTE,
       };
     }),
 

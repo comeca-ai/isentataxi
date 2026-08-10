@@ -8,6 +8,10 @@ import { fmtBRL, fuelLabel, pct } from './catalog';
 
 export interface PanelData extends LocalCalc {
   fuel: 'flex' | 'hibrido' | 'eletrico';
+  /** IPVA anual estimado (4% do valor venal) — vem do calculate; fallback local */
+  ipvaAnnual: number;
+  /** Nota do 1º ano de atividade (taxista novo paga o 1º IPVA) */
+  ipvaNote: string;
 }
 
 /** Painel de resultado sticky — tweens GSAP isolados (sem Framer nesta árvore). */
@@ -193,6 +197,18 @@ export default function ResultPanel({
                 <div className="flex justify-between gap-3 border-b border-dashed border-border-subtle pb-3">
                   <dt className="text-text-muted">ICMS SP (12%)</dt>
                   <dd className="text-money-green">= R$ <span ref={icmsRef}>{fmtBRL(data.icmsValue)}</span></dd>
+                </div>
+                <div className="border-b border-dashed border-border-subtle pb-3">
+                  <div className="flex justify-between gap-3">
+                    <dt className="text-text-muted">IPVA (4%/ano)</dt>
+                    <dd className="flex items-center gap-2 text-money-green">
+                      R$ {fmtBRL(data.ipvaAnnual)}/ano
+                      <span className="rounded-full border border-money-green/40 bg-money-green/10 px-2 py-0.5 font-mono text-[0.7rem] font-bold">
+                        ISENTO*
+                      </span>
+                    </dd>
+                  </div>
+                  <p className="mt-1.5 font-sans text-[0.8125rem] leading-snug text-text-faint">{data.ipvaNote}</p>
                 </div>
                 <div className="flex justify-between gap-3">
                   <dt className="text-text-muted">Preço com isenção</dt>

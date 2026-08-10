@@ -40,9 +40,13 @@ export default function SectionIsencoes() {
           </RevealItem>
           <RevealItem>
             <p>
-              <strong className="text-text-primary">IPVA</strong> — existe isenção estadual e discussões
-              municipais. É um benefício potencial adicional, avaliado caso a caso,{' '}
-              <strong className="text-text-primary">sem promessa</strong>.
+              <strong className="text-text-primary">IPVA (SP)</strong> — isenção estadual{' '}
+              <strong className="text-text-primary">total (100%, sem teto)</strong> para táxi, que vale todo ano
+              enquanto as condições se mantiverem. Tem regras e gatilhos próprios — detalhamos na{' '}
+              <a href="#ipva" className="font-medium text-taxi-yellow transition-colors hover:text-taxi-yellow-hover">
+                seção de IPVA
+              </a>{' '}
+              deste guia.
             </p>
           </RevealItem>
         </div>

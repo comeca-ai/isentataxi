@@ -4,15 +4,26 @@ import { addDays } from 'date-fns';
 import {
   AlertCircle,
   ArrowRight,
+  BellRing,
+  CalendarClock,
   CheckCircle2,
   Circle,
+  ExternalLink,
   MessageCircle,
   PartyPopper,
+  ShieldCheck,
   Upload,
 } from 'lucide-react';
 import { trpc } from '@/providers/trpc';
 import { useAuth } from '@/hooks/useAuth';
-import { STAGES, WHATSAPP_URL, type StageStatus } from '@contracts/constants';
+import {
+  IPVA_ZERO_KM_DEADLINE_DAYS,
+  LICENCIAMENTO_2026,
+  SEFAZ_IPVA_URL,
+  STAGES,
+  WHATSAPP_URL,
+  type StageStatus,
+} from '@contracts/constants';
 import StageTimeline from '@/components/app/StageTimeline';
 import ProgressRing from '@/components/app/ProgressRing';
 import AppToaster from '@/components/app/AppToaster';
@@ -28,7 +39,7 @@ import {
 import { cn } from '@/lib/utils';
 
 /** Prazo típico (dias) por etapa — para o chip "Previsão" */
-const STAGE_DAYS: Record<number, number> = { 1: 2, 2: 7, 3: 42, 4: 30, 5: 45, 6: 30, 7: 60 };
+const STAGE_DAYS: Record<number, number> = { 1: 2, 2: 7, 3: 42, 4: 30, 5: 45, 6: 30, 7: 60, 8: 30 };
 const STAGE_BLURB: Record<number, string> = {
   1: 'Conferindo seus dados de cadastro e pré-análise.',
   2: 'Envie os documentos — nossa equipe revisa em até 1 dia útil.',
@@ -37,6 +48,7 @@ const STAGE_BLURB: Record<number, string> = {
   5: 'Pedido de isenção de IPI na Receita Federal. Prazo típico: 4–6 semanas.',
   6: 'Autorização de ICMS na Sefaz-SP. Prazo típico: 2–4 semanas.',
   7: 'Hora de comprar seu táxi 0 km! Comprove em até 60 dias.',
+  8: 'Pedido de isenção de IPVA no SIVEI em até 30 dias da NF-e.',
 };
 
 type FeedEntry = { id: string; date: Date; text: string; tone: 'blue' | 'green' | 'red' | 'zinc' | 'amber' };
@@ -94,7 +106,7 @@ export default function AppDashboard() {
     const currentRow = stages.find((s) => s.stage === currentStage);
     const currentDef = STAGES.find((s) => s.n === currentStage);
     const done = stages.filter((s) => s.status === 'concluida').length;
-    const percent = Math.round((done / 7) * 100);
+    const percent = Math.round((done / STAGES.length) * 100);
 
     const docsByType = new Map<string, (typeof docs)[number]>();
     for (const d of docs) {
@@ -152,6 +164,15 @@ export default function AppDashboard() {
 
     const previsao = currentRow ? addDays(new Date(currentRow.updatedAt), STAGE_DAYS[currentStage] ?? 30) : null;
 
+    // Lembretes pós-compra (IPVA + licenciamento) derivados do perfil
+    const purchaseDate = profile?.purchaseDate ?? null;
+    const ipvaDaysLeft = purchaseDate
+      ? IPVA_ZERO_KM_DEADLINE_DAYS -
+        Math.floor((Date.now() - new Date(`${purchaseDate}T00:00:00`).getTime()) / 86_400_000)
+      : null;
+    const plateDigit = profile?.plateFinalDigit ?? null;
+    const licMonth = plateDigit ? (LICENCIAMENTO_2026.calendario[Number(plateDigit)] ?? null) : null;
+
     const reachedStage7 = currentStage >= 7;
     const deadlineDays = process.postPurchaseDeadline
       ? Math.max(0, Math.ceil((new Date(process.postPurchaseDeadline).getTime() - new Date().getTime()) / 86_400_000))
@@ -174,6 +195,10 @@ export default function AppDashboard() {
       previsao,
       reachedStage7,
       deadlineDays,
+      ipvaDaysLeft,
+      licMonth,
+      plateDigit,
+      purchaseDate,
     };
   })();
 
@@ -181,7 +206,7 @@ export default function AppDashboard() {
 
   const firstName = (user?.name ?? 'taxista').trim().split(' ')[0] ?? 'taxista';
   const waMessage = encodeURIComponent(
-    `Olá! Sou ${user?.name ?? 'cliente'} da IsentaTáxi, processo #${derived.process.id} (etapa ${derived.currentStage}/7). Preciso de ajuda.`,
+    `Olá! Sou ${user?.name ?? 'cliente'} da IsentaTáxi, processo #${derived.process.id} (etapa ${derived.currentStage}/8). Preciso de ajuda.`,
   );
 
   return (
@@ -203,7 +228,7 @@ export default function AppDashboard() {
         </div>
         <div className="flex flex-wrap gap-2">
           <span className="rounded-full border border-info-blue/40 bg-info-blue/10 px-3 py-1 font-mono text-xs text-info-blue">
-            Etapa {derived.currentStage}/7 — {derived.currentDef?.name ?? ''}
+            Etapa {derived.currentStage}/8 — {derived.currentDef?.name ?? ''}
           </span>
           <span className="rounded-full border border-warn-amber/40 bg-warn-amber/10 px-3 py-1 font-mono text-xs text-warn-amber">
             {daysToDeadline()} dias p/ o teto 2026
@@ -288,6 +313,82 @@ export default function AppDashboard() {
         </motion.section>
       )}
 
+      {/* S7b — Lembretes (IPVA + licenciamento) */}
+      <motion.section
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1, duration: 0.28, ease: 'easeOut' }}
+        className="rounded-2xl border border-border-subtle bg-bg-surface p-6"
+      >
+        <h3 className="flex items-center gap-2 font-bold text-text-primary">
+          <BellRing className="h-5 w-5 text-taxi-yellow" /> Lembretes
+        </h3>
+        {!derived.purchaseDate && !derived.plateDigit ? (
+          <div className="mt-4 flex flex-wrap items-center justify-between gap-4">
+            <p className="text-sm text-text-muted">
+              Complete seus dados pós-compra (data da NF-e e final da placa) para ativar os lembretes de IPVA e
+              licenciamento.
+            </p>
+            <Link
+              to="/app/cadastro"
+              className="inline-flex items-center gap-2 rounded-full bg-taxi-yellow px-4 py-2 text-sm font-bold text-bg-base transition-all hover:bg-taxi-yellow-hover hover:shadow-cta-glow"
+            >
+              Complete seus dados pós-compra <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+        ) : (
+          <ul className="mt-4 space-y-3">
+            {derived.ipvaDaysLeft !== null && (
+              <li className="flex items-start gap-3">
+                <CalendarClock className="mt-0.5 h-5 w-5 shrink-0 text-taxi-yellow" />
+                <span className="text-sm text-text-primary">
+                  Pedido SIVEI IPVA:{' '}
+                  {derived.ipvaDaysLeft > 0 ? (
+                    <span
+                      className={cn(
+                        'font-mono font-bold',
+                        derived.ipvaDaysLeft <= 7 ? 'animate-pulse text-alert-red' : 'text-text-primary',
+                      )}
+                    >
+                      {derived.ipvaDaysLeft} dias restantes
+                    </span>
+                  ) : (
+                    <span className="font-mono font-bold text-money-green">
+                      prazo encerrado — verifique a certidão
+                    </span>
+                  )}
+                  <span className="ml-2 text-text-faint">regra dos {IPVA_ZERO_KM_DEADLINE_DAYS} dias da NF-e</span>
+                </span>
+              </li>
+            )}
+            {derived.licMonth && (
+              <li className="flex items-start gap-3">
+                <CalendarClock className="mt-0.5 h-5 w-5 shrink-0 text-info-blue" />
+                <span className="text-sm text-text-primary">
+                  Licenciamento 2026: ~{derived.licMonth} —{' '}
+                  R$ {LICENCIAMENTO_2026.valor.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  <span className="ml-2 rounded-full border border-border-strong bg-bg-elevated px-2 py-0.5 font-mono text-[0.7rem] text-text-muted">
+                    calendário estimado
+                  </span>
+                </span>
+              </li>
+            )}
+            <li className="flex items-start gap-3">
+              <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-money-green" />
+              <a
+                href={SEFAZ_IPVA_URL}
+                target="_blank"
+                rel="noreferrer"
+                className="group text-sm text-text-primary hover:underline"
+              >
+                Certidão de isenção IPVA — conferir 1×/ano
+                <ExternalLink className="ml-1.5 inline h-3.5 w-3.5 text-text-faint group-hover:text-taxi-yellow" />
+              </a>
+            </li>
+          </ul>
+        )}
+      </motion.section>
+
       {/* S3 + S4/S5/S6 — grid */}
       <div className="grid items-start gap-6 lg:grid-cols-3">
         <motion.section
@@ -296,7 +397,7 @@ export default function AppDashboard() {
           transition={{ delay: 0.12, duration: 0.28, ease: 'easeOut' }}
           className="rounded-2xl border border-border-subtle bg-bg-surface p-6 lg:col-span-2 lg:p-8"
         >
-          <h2 className="text-lg font-bold text-text-primary">As 7 etapas do seu processo</h2>
+          <h2 className="text-lg font-bold text-text-primary">As 8 etapas do seu processo</h2>
           <p className="mb-4 mt-1 text-sm text-text-muted">Toque numa etapa para ver detalhes e documentos.</p>
           <StageTimeline
             rows={derived.stages.map((s) => ({

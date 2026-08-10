@@ -138,6 +138,14 @@ const schema = z.object({
   intendedPrice: z.number().int().positive().nullable().optional(),
   concessionaria: z.string().optional(),
   declaracao: z.boolean().optional(),
+  purchaseDate: z
+    .string()
+    .optional()
+    .refine((v) => !v || /^\d{4}-\d{2}-\d{2}$/.test(v), 'Use o formato aaaa-mm-dd'),
+  plateFinalDigit: z
+    .string()
+    .optional()
+    .refine((v) => !v || /^[0-9]$/.test(v), 'Use um dígito de 0 a 9'),
 });
 
 type FormValues = z.infer<typeof schema>;
@@ -268,6 +276,7 @@ export default function AppCadastro() {
       cep: '', street: '', number: '', complement: '', district: '', city: 'São Paulo', state: 'SP',
       comprovanteRecente: true,
       intendedVehicleId: null, intendedPrice: null, concessionaria: '', declaracao: false,
+      purchaseDate: '', plateFinalDigit: '',
     },
   });
 
@@ -303,6 +312,8 @@ export default function AppCadastro() {
       intendedPrice: p.intendedPrice ?? null,
       concessionaria: '',
       declaracao: false,
+      purchaseDate: p.purchaseDate ?? '',
+      plateFinalDigit: p.plateFinalDigit ?? '',
     });
   }, [profileQ.data, reset]);
 
@@ -332,6 +343,8 @@ export default function AppCadastro() {
     state: 'SP',
     intendedVehicleId: v.intendedVehicleId ?? null,
     intendedPrice: v.intendedPrice ?? null,
+    purchaseDate: v.purchaseDate || null,
+    plateFinalDigit: v.plateFinalDigit || null,
   });
 
   // Autosave (debounce 800ms) — só quando os campos obrigatórios do backend estão válidos
@@ -1016,6 +1029,44 @@ export default function AppCadastro() {
                         <span className="ml-2 font-sans text-xs font-normal text-text-faint">estimativa IPI + ICMS</span>
                       </p>
                     )}
+
+                    {/* Pós-compra (opcional) — ativa os lembretes do dashboard */}
+                    <div className="grid gap-5 border-t border-border-subtle pt-5 md:grid-cols-2">
+                      <div>
+                        <label htmlFor="purchaseDate" className={labelCls}>Data da compra (NF-e) <span className="font-normal text-text-faint">(opcional)</span></label>
+                        <input
+                          id="purchaseDate"
+                          type="date"
+                          className={cn(inputCls, errors.purchaseDate && inputErrCls)}
+                          {...register('purchaseDate')}
+                        />
+                        {errors.purchaseDate && (
+                          <p className="mt-1 text-[0.8125rem] text-alert-red">{errors.purchaseDate.message}</p>
+                        )}
+                      </div>
+                      <div>
+                        <label htmlFor="plateFinalDigit" className={labelCls}>Final da placa <span className="font-normal text-text-faint">(opcional)</span></label>
+                        <input
+                          id="plateFinalDigit"
+                          inputMode="numeric"
+                          maxLength={1}
+                          placeholder="0–9"
+                          className={cn(inputCls, errors.plateFinalDigit && inputErrCls)}
+                          {...register('plateFinalDigit')}
+                          onChange={(e) => {
+                            const digit = e.target.value.replace(/\D/g, '').slice(0, 1);
+                            setValue('plateFinalDigit', digit, { shouldDirty: true, shouldValidate: true });
+                          }}
+                        />
+                        {errors.plateFinalDigit && (
+                          <p className="mt-1 text-[0.8125rem] text-alert-red">{errors.plateFinalDigit.message}</p>
+                        )}
+                      </div>
+                      <p className="text-[0.8125rem] text-text-faint md:col-span-2">
+                        Preencha depois da compra para ativar os lembretes (prazo SIVEI de 30 dias da NF-e e
+                        licenciamento anual) no seu painel.
+                      </p>
+                    </div>
                   </div>
 
                   {/* 5b — Revisão */}
