@@ -48,6 +48,26 @@ module.exports = {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        // IsentaTáxi palette
+        "bg-base": "#0A0A0B",
+        "bg-surface": "#131316",
+        "bg-elevated": "#1B1B1F",
+        "taxi-yellow": "#FACC15",
+        "taxi-yellow-hover": "#EAB308",
+        "money-green": "#22C55E",
+        "alert-red": "#EF4444",
+        "warn-amber": "#F59E0B",
+        "info-blue": "#38BDF8",
+        "text-primary": "#FAFAFA",
+        "text-muted": "#A1A1AA",
+        "text-faint": "#71717A",
+        "border-subtle": "#27272A",
+        "border-strong": "#3F3F46",
+      },
+      fontFamily: {
+        display: ['"Archivo Black"', 'sans-serif'],
+        sans: ['Inter', 'sans-serif'],
+        mono: ['"JetBrains Mono"', 'monospace'],
       },
       borderRadius: {
         xl: "calc(var(--radius) + 4px)",
@@ -58,6 +78,7 @@ module.exports = {
       },
       boxShadow: {
         xs: "0 1px 2px 0 rgb(0 0 0 / 0.05)",
+        "cta-glow": "0 0 32px rgba(250,204,21,0.35)",
       },
       keyframes: {
         "accordion-down": {
@@ -72,11 +93,22 @@ module.exports = {
           "0%,70%,100%": { opacity: "1" },
           "20%,50%": { opacity: "0" },
         },
+        marquee: {
+          from: { transform: "translateX(0)" },
+          to: { transform: "translateX(-50%)" },
+        },
+        "zebra-move": {
+          from: { backgroundPosition: "0 0" },
+          to: { backgroundPosition: "64px 0" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "caret-blink": "caret-blink 1.25s ease-out infinite",
+        marquee: "marquee 32s linear infinite",
+        "marquee-slow": "marquee 24s linear infinite",
+        "zebra-move": "zebra-move 1.2s linear infinite",
       },
     },
   },
