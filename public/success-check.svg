@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240" fill="none">
+  <circle cx="120" cy="120" r="116" fill="#0A0A0B"/>
+  <!-- checkered ring -->
+  <circle cx="120" cy="120" r="104" fill="none" stroke="#FACC15" stroke-width="16" stroke-dasharray="27.23 27.23" transform="rotate(-11.25 120 120)"/>
+  <circle cx="120" cy="120" r="88" fill="#0A0A0B"/>
+  <circle cx="120" cy="120" r="88" fill="none" stroke="#27272A" stroke-width="1.5"/>
+  <!-- white check -->
+  <path d="M78 124 l30 30 l56 -64" stroke="#FAFAFA" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+</svg>
