@@ -11,6 +11,10 @@ import {
   MessageCircle,
   UserRound,
 } from 'lucide-react';
+import { STAGES } from '@contracts/constants';
+import RequireAuth from '@/components/RequireAuth';
+import { useAuth } from '@/hooks/useAuth';
+import { trpc } from '@/providers/trpc';
 import { cn } from '@/lib/utils';
 
 const ITEMS = [
@@ -32,9 +36,33 @@ const BREADCRUMB: Record<string, string> = {
 
 /** Shell do cliente (/app/*): sidebar 264px (colapsável 72px) + topbar; bottom-tab-bar no mobile */
 export default function AppShell({ children }: { children: ReactNode }) {
+  return (
+    <RequireAuth>
+      <AppShellContent>{children}</AppShellContent>
+    </RequireAuth>
+  );
+}
+
+/** Chip da etapa atual do processo (oculto enquanto carrega) */
+function StageChip() {
+  const { data, isLoading } = trpc.process.mine.useQuery();
+  if (isLoading || !data) return null;
+  const current = data.process.currentStage;
+  const def = STAGES.find((s) => s.n === current);
+  if (!def) return null;
+  return (
+    <span className="hidden rounded-full border border-taxi-yellow/30 bg-taxi-yellow/10 px-3 py-1 font-mono text-xs text-taxi-yellow sm:inline-block">
+      Etapa {current}/7 — {def.name}
+    </span>
+  );
+}
+
+function AppShellContent({ children }: { children: ReactNode }) {
   const [collapsed, setCollapsed] = useState(false);
   const location = useLocation();
   const section = BREADCRUMB[location.pathname] ?? 'Painel';
+  const { user, logout } = useAuth();
+  const initial = (user?.name?.trim().charAt(0) ?? 'U').toUpperCase();
 
   return (
     <div className="min-h-[100dvh] bg-bg-base text-text-primary">
@@ -119,9 +147,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
             <span className="font-medium text-text-primary">{section}</span>
           </div>
           <div className="flex items-center gap-3">
-            <span className="hidden rounded-full border border-taxi-yellow/30 bg-taxi-yellow/10 px-3 py-1 font-mono text-xs text-taxi-yellow sm:inline-block">
-              Etapa 3/7 — DTP
-            </span>
+            <StageChip />
             <button
               className="relative flex h-10 w-10 items-center justify-center rounded-full border border-border-subtle text-text-muted transition-colors hover:border-border-strong hover:text-text-primary"
               aria-label="Notificações"
@@ -134,16 +160,19 @@ export default function AppShell({ children }: { children: ReactNode }) {
                 className="flex h-10 w-10 items-center justify-center rounded-full bg-taxi-yellow font-bold text-bg-base"
                 aria-label="Menu da conta"
               >
-                T
+                {initial}
               </button>
-              <div className="invisible absolute right-0 top-12 w-44 rounded-xl border border-border-subtle bg-bg-elevated p-1.5 opacity-0 shadow-lg transition-all group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100">
-                {/* AUTH-SLOT: rewired to useAuth() in Phase 5 */}
-                <Link
-                  to="/login"
-                  className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-text-muted transition-colors hover:bg-bg-surface hover:text-text-primary"
+              <div className="invisible absolute right-0 top-12 w-56 rounded-xl border border-border-subtle bg-bg-elevated p-1.5 opacity-0 shadow-lg transition-all group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100">
+                <div className="border-b border-border-subtle px-3 py-2">
+                  <p className="truncate text-sm font-medium text-text-primary">{user?.name ?? 'Minha conta'}</p>
+                  {user?.email && <p className="truncate text-xs text-text-faint">{user.email}</p>}
+                </div>
+                <button
+                  onClick={() => logout()}
+                  className="mt-1 flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm text-text-muted transition-colors hover:bg-bg-surface hover:text-text-primary"
                 >
                   <LogOut className="h-4 w-4" /> Sair
-                </Link>
+                </button>
               </div>
             </div>
           </div>

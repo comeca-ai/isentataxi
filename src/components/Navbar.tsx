@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ArrowRight, Menu, TriangleAlert, X } from 'lucide-react';
+import { ArrowRight, ChevronDown, LayoutDashboard, LogOut, Menu, TriangleAlert, X } from 'lucide-react';
+import { LOGIN_PATH } from '@/const';
+import { useAuth } from '@/hooks/useAuth';
 import { cn } from '@/lib/utils';
 
 const DEADLINE = new Date('2026-12-31T23:59:59-03:00').getTime();
@@ -44,6 +46,100 @@ function UrgencyStrip() {
         </div>
       </div>
     </div>
+  );
+}
+
+/** Slot de autenticação: Entrar (visitante) ou menu do usuário logado */
+function AuthMenu({ onNavigate }: { onNavigate?: () => void }) {
+  const { user, isLoading, logout } = useAuth();
+
+  if (isLoading) {
+    // Placeholder neutro enquanto a sessão carrega
+    return <div className="h-[44px] w-24 rounded-full" aria-hidden="true" />;
+  }
+
+  if (!user) {
+    return (
+      <Link
+        to={LOGIN_PATH}
+        onClick={onNavigate}
+        className="rounded-full px-4 py-2.5 text-sm font-medium text-text-muted transition-colors hover:bg-taxi-yellow/10 hover:text-text-primary"
+      >
+        Entrar
+      </Link>
+    );
+  }
+
+  const firstName = user.name?.split(' ')[0] ?? 'Minha conta';
+  const initial = (user.name?.trim().charAt(0) ?? 'U').toUpperCase();
+
+  return (
+    <div className="group relative">
+      <button
+        className="flex items-center gap-2 rounded-full border border-border-subtle py-1.5 pl-1.5 pr-3 text-sm font-medium text-text-primary transition-colors hover:border-border-strong"
+        aria-label="Menu da conta"
+      >
+        <span className="flex h-8 w-8 items-center justify-center rounded-full bg-taxi-yellow font-bold text-bg-base">
+          {initial}
+        </span>
+        {firstName}
+        <ChevronDown className="h-3.5 w-3.5 text-text-muted" aria-hidden="true" />
+      </button>
+      <div className="invisible absolute right-0 top-12 w-48 rounded-xl border border-border-subtle bg-bg-elevated p-1.5 opacity-0 shadow-lg transition-all group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100">
+        <Link
+          to="/app"
+          onClick={onNavigate}
+          className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-text-muted transition-colors hover:bg-bg-surface hover:text-text-primary"
+        >
+          <LayoutDashboard className="h-4 w-4" /> Meu painel
+        </Link>
+        <button
+          onClick={() => logout()}
+          className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm text-text-muted transition-colors hover:bg-bg-surface hover:text-text-primary"
+        >
+          <LogOut className="h-4 w-4" /> Sair
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/** Slot de autenticação do drawer mobile (largura total) */
+function MobileAuthMenu({ onNavigate }: { onNavigate: () => void }) {
+  const { user, isLoading, logout } = useAuth();
+
+  if (isLoading) {
+    return <div className="h-[52px] rounded-full" aria-hidden="true" />;
+  }
+
+  if (!user) {
+    return (
+      <Link
+        to={LOGIN_PATH}
+        onClick={onNavigate}
+        className="flex h-[52px] items-center justify-center rounded-full border border-border-strong font-medium text-text-primary"
+      >
+        Entrar
+      </Link>
+    );
+  }
+
+  return (
+    <>
+      <Link
+        to="/app"
+        onClick={onNavigate}
+        className="flex h-[52px] items-center justify-center gap-2 rounded-full border border-border-strong font-medium text-text-primary"
+      >
+        <LayoutDashboard className="h-4 w-4" /> Meu painel
+      </Link>
+      <button
+        onClick={() => logout()}
+        className="flex h-[52px] items-center justify-center gap-2 rounded-full font-medium text-text-muted transition-colors hover:text-text-primary"
+      >
+        <LogOut className="h-4 w-4" /> Sair
+      </button>
+    </>
   );
 }
 
@@ -109,13 +205,7 @@ export default function Navbar() {
           </div>
 
           <div className="hidden items-center gap-3 lg:flex">
-            {/* AUTH-SLOT: rewired to useAuth() in Phase 5 */}
-            <Link
-              to="/login"
-              className="rounded-full px-4 py-2.5 text-sm font-medium text-text-muted transition-colors hover:bg-taxi-yellow/10 hover:text-text-primary"
-            >
-              Entrar
-            </Link>
+            <AuthMenu />
             <Link
               to="/simulador"
               className="group flex h-[44px] items-center gap-2 rounded-full bg-taxi-yellow px-5 text-sm font-bold text-bg-base transition-all duration-200 hover:scale-[1.03] hover:bg-taxi-yellow-hover hover:shadow-cta-glow"
@@ -189,13 +279,7 @@ export default function Navbar() {
                   Simular grátis <ArrowRight className="h-4 w-4" />
                 </Link>
                 {/* AUTH-SLOT: rewired to useAuth() in Phase 5 */}
-                <Link
-                  to="/login"
-                  onClick={() => setOpen(false)}
-                  className="flex h-[52px] items-center justify-center rounded-full border border-border-strong font-medium text-text-primary"
-                >
-                  Entrar
-                </Link>
+                <MobileAuthMenu onNavigate={() => setOpen(false)} />
               </motion.div>
             </div>
           </motion.div>
