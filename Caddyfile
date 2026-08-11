@@ -1,0 +1,7 @@
+isentataxi.com.br, www.isentataxi.com.br {
+	encode zstd gzip
+	request_body {
+		max_size 20MB
+	}
+	reverse_proxy app:3000
+}

@@ -26,22 +26,20 @@ services:
       retries: 20
     restart: unless-stopped
 
-  # ── HTTPS opcional com Caddy ──────────────────────────────────────────────
-  # 1) Aponte o DNS do seu domínio para o IP deste VPS
-  # 2) Crie um arquivo Caddyfile com:  seudominio.com.br { reverse_proxy app:3000 }
-  # 3) Descomente o serviço abaixo e rode: docker compose up -d
-  # caddy:
-  #   image: caddy:2-alpine
-  #   ports:
-  #     - "80:80"
-  #     - "443:443"
-  #   volumes:
-  #     - ./Caddyfile:/etc/caddy/Caddyfile:ro
-  #     - caddy-data:/data
-  #   depends_on:
-  #     - app
-  #   restart: unless-stopped
+  # ── HTTPS com Caddy (Let's Encrypt automático) ────────────────────────────
+  # Pré-requisito: DNS de isentataxi.com.br apontando para o IP desta VPS.
+  caddy:
+    image: caddy:2-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+    depends_on:
+      - app
+    restart: unless-stopped
 
 volumes:
   mysql-data:
-  # caddy-data:
+  caddy-data:
