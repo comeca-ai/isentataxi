@@ -65,7 +65,7 @@ export function buildQuestions(hasContact: boolean): Question[] {
     {
       id: 'cursos',
       block: 'SOBRE VOCÊ',
-      text: <>Você já concluiu os <strong className="text-taxi-yellow">cursos obrigatórios</strong> (conduta, primeiros socorros, mecânica básica)?</>,
+      text: <>Você já concluiu os <strong className="text-taxi-yellow">curso obrigatório</strong> (Condutax)?</>,
       type: 'choice',
       choices: [
         { value: 'todos', label: 'Sim, todos' },
@@ -213,6 +213,15 @@ export function buildQuestions(hasContact: boolean): Question[] {
       when: () => !hasContact,
       validate: (v) => (v.replace(/\D/g, '').length >= 10 ? null : 'Digite um WhatsApp válido com DDD.'),
     },
+    {
+      id: 'contato_indicacao',
+      block: 'CONTATO',
+      text: <>Quem te <strong className="text-taxi-yellow">indicou</strong>? <span className="text-text-faint">(opcional)</span></>,
+      hint: 'Taxista que indica ganha — coloque o nome ou WhatsApp de quem te trouxe. Pode pular.',
+      type: 'input',
+      inputKind: 'text',
+      validate: () => null,
+    },
   ];
   return questions;
 }
@@ -239,8 +248,8 @@ export function evaluate(answers: Answers): Evaluation {
   if (answers.alvara_nome === 'vencido') pendencias.push('Alvará vencido ou suspenso — regularize na Prefeitura de SP.');
   if (answers.ear === 'nao') pendencias.push('CNH sem EAR — resolver no Detran-SP.');
   if (answers.ear === 'nao_sei') pendencias.push('Confirmar EAR no verso da CNH (campo "Observações").');
-  if (answers.cursos === 'alguns') pendencias.push('Faltam cursos obrigatórios — complete conduta, primeiros socorros e mecânica básica.');
-  if (answers.cursos === 'nenhum') pendencias.push('Cursos obrigatórios pendentes — conduta, primeiros socorros e mecânica básica.');
+  if (answers.cursos === 'alguns') pendencias.push('Curso obrigatório pendente — conclua o Condutax.');
+  if (answers.cursos === 'nenhum') pendencias.push('Curso obrigatório pendente — Condutax.');
   if (answers.usou_antes === 'menos2') {
     const ano = Number(answers.ano_beneficio);
     if (ano && !Number.isNaN(ano)) {

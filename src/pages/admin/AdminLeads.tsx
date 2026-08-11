@@ -34,7 +34,7 @@ type SortKey = 'name' | 'savings' | 'createdAt';
 
 function leadCsvRows(leads: Lead[]): (string | number | null)[][] {
   return [
-    ['ID', 'Nome', 'WhatsApp', 'E-mail', 'Origem', 'Resultado', 'Status', 'Carro de interesse', 'Economia est. (R$)', 'Criado em', 'Respostas do quiz', 'Simulação'],
+    ['ID', 'Nome', 'WhatsApp', 'E-mail', 'Indicação', 'Origem', 'Resultado', 'Status', 'Carro de interesse', 'Economia est. (R$)', 'Criado em', 'Respostas do quiz', 'Simulação'],
     ...leads.map((l) => {
       const sim = extractSimulation(l.simulationSnapshot);
       return [
@@ -42,6 +42,7 @@ function leadCsvRows(leads: Lead[]): (string | number | null)[][] {
         l.name,
         l.whatsapp,
         l.email ?? '',
+        l.referredBy ?? '',
         LEAD_SOURCE[l.source]?.label ?? l.source,
         l.eligibilityResult ? (ELIGIBILITY[l.eligibilityResult]?.label ?? l.eligibilityResult) : '',
         LEAD_STATUS[l.status]?.label ?? l.status,

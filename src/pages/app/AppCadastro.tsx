@@ -166,7 +166,7 @@ const STEP_FIELDS: Record<number, FieldPath<FormValues>[]> = {
   5: [],
 };
 
-const CURSOS = ['Conduta no trânsito', 'Primeiros socorros', 'Mecânica básica', 'Relações humanas'];
+const CURSOS = ['Condutax'];
 
 /** Campos persistidos usados no % de completude e no autosave */
 const PERSISTED_KEYS = [
@@ -466,7 +466,7 @@ export default function AppCadastro() {
   const economy = selectedVehicle && priceForEconomy ? estimateEconomy(priceForEconomy, selectedVehicle.ipiRate) : null;
   const pendencias: string[] = [];
   if (!watched.cnhEAR) pendencias.push('EAR pendente na CNH');
-  if ((watched.cursos ?? []).length < CURSOS.length) pendencias.push('Cursos obrigatórios incompletos');
+  if ((watched.cursos ?? []).length < CURSOS.length) pendencias.push('Curso Condutax pendente');
   if (watched.alvaraSituacao === 'suspenso') pendencias.push('Alvará suspenso');
 
   // -------------------------------------------------------------------------
@@ -797,7 +797,7 @@ export default function AppCadastro() {
                       )}
                     </AnimatePresence>
                     <div>
-                      <label className={labelCls}>Cursos obrigatórios concluídos*</label>
+                      <label className={labelCls}>Curso obrigatório concluído*</label>
                       <Controller
                         control={control}
                         name="cursos"
@@ -1103,7 +1103,7 @@ export default function AppCadastro() {
                           step: 3, title: 'Alvará',
                           rows: [
                             ['Número', watched.alvaraNumber], ['Validade', watched.alvaraExpiry || '—'],
-                            ['Cursos', `${(watched.cursos ?? []).length}/${CURSOS.length}`],
+                            ['Condutax', (watched.cursos ?? []).length ? 'Concluído' : 'Pendente'],
                           ],
                         },
                         {

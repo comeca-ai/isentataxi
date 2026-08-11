@@ -20,6 +20,7 @@ function ModalContent({
   const navigate = useNavigate();
   const [name, setName] = useState(() => loadStoredContact()?.name ?? '');
   const [whatsapp, setWhatsapp] = useState(() => loadStoredContact()?.whatsapp ?? '');
+  const [referredBy, setReferredBy] = useState('');
   const [consent, setConsent] = useState(false);
   const [done, setDone] = useState(false);
 
@@ -31,7 +32,7 @@ function ModalContent({
     if (!valid || saveLead.isPending) return;
     const cleanName = name.trim();
     saveLead.mutate(
-      { name: cleanName, whatsapp, simulationSnapshot: snapshot },
+      { name: cleanName, whatsapp, referredBy: referredBy.trim() || undefined, simulationSnapshot: snapshot },
       {
         onSuccess: ({ id }) => {
           localStorage.setItem('itx_contact', JSON.stringify({ name: cleanName, whatsapp, leadId: id }));
@@ -103,6 +104,19 @@ function ModalContent({
             autoComplete="tel"
             className="h-12 w-full rounded-xl border border-border-subtle bg-bg-base px-4 font-mono text-text-primary outline-none transition-colors placeholder:text-text-faint focus:border-taxi-yellow focus:ring-2 focus:ring-taxi-yellow/40"
           />
+        </div>
+        <div>
+          <label htmlFor="lead-ref" className="mb-1.5 block text-sm font-medium text-text-muted">
+            Quem te indicou? <span className="text-text-faint">(opcional)</span>
+          </label>
+          <input
+            id="lead-ref"
+            value={referredBy}
+            onChange={(e) => setReferredBy(e.target.value)}
+            placeholder="Nome ou WhatsApp do taxista"
+            className="h-12 w-full rounded-xl border border-border-subtle bg-bg-base px-4 text-text-primary outline-none transition-colors placeholder:text-text-faint focus:border-taxi-yellow focus:ring-2 focus:ring-taxi-yellow/40"
+          />
+          <p className="mt-1.5 text-[0.75rem] text-text-faint">Taxista que indica ganha — informe quem te trouxe.</p>
         </div>
         <label className="flex cursor-pointer items-start gap-2.5 text-[0.8125rem] leading-snug text-text-muted">
           <input

@@ -93,6 +93,7 @@ export const authRouter = createRouter({
         password: z
           .string()
           .min(8, "A senha deve ter pelo menos 8 caracteres"),
+        referredBy: z.string().trim().max(255).optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -109,6 +110,7 @@ export const authRouter = createRouter({
         name: input.name,
         email: input.email,
         passwordHash,
+        referredBy: input.referredBy || null,
         role: "user",
         lastSignInAt: new Date(),
       });

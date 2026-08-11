@@ -163,6 +163,11 @@ export default function LeadDrawer({
                     Origem: {LEAD_SOURCE[lead.source]?.label ?? lead.source} · recebido em {fmtDateTime(lead.createdAt)}
                   </p>
                   {lead.email && <p className="mt-1 text-[0.8125rem] text-text-faint">E-mail: {lead.email}</p>}
+                  {lead.referredBy && (
+                    <p className="mt-1 text-[0.8125rem] font-semibold text-taxi-yellow">
+                      Indicação: {lead.referredBy} — taxista que indica ganha
+                    </p>
+                  )}
                 </motion.div>
 
                 {/* Respostas da pré-análise */}

@@ -18,6 +18,7 @@ const registerSchema = z.object({
   name: z.string().trim().min(2, "Informe seu nome"),
   email: z.string().email("Informe um e-mail válido"),
   password: z.string().min(8, "A senha deve ter pelo menos 8 caracteres"),
+  referredBy: z.string().trim().max(255).optional(),
 });
 
 type LoginValues = z.infer<typeof loginSchema>;
@@ -54,7 +55,7 @@ export default function Login() {
   });
   const registerForm = useForm<RegisterValues>({
     resolver: zodResolver(registerSchema),
-    defaultValues: { name: "", email: "", password: "" },
+    defaultValues: { name: "", email: "", password: "", referredBy: "" },
   });
 
   const isPending = loginMutation.isPending || registerMutation.isPending;
@@ -143,7 +144,10 @@ export default function Login() {
           <form
             className="space-y-4"
             onSubmit={registerForm.handleSubmit((values) =>
-              registerMutation.mutate(values),
+              registerMutation.mutate({
+                ...values,
+                referredBy: values.referredBy?.trim() || undefined,
+              }),
             )}
           >
             <div className="space-y-2">
@@ -192,6 +196,21 @@ export default function Login() {
                   {registerForm.formState.errors.password.message}
                 </p>
               )}
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="reg-ref">
+                Quem te indicou?{" "}
+                <span className="text-white/40 font-normal">(opcional)</span>
+              </Label>
+              <Input
+                id="reg-ref"
+                placeholder="Nome ou WhatsApp do taxista"
+                className="bg-white/5 border-white/10"
+                {...registerForm.register("referredBy")}
+              />
+              <p className="text-xs text-white/40">
+                Taxista que indica ganha — informe quem te trouxe.
+              </p>
             </div>
             <Button
               type="submit"

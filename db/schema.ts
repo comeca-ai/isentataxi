@@ -30,6 +30,8 @@ export const users = mysqlTable("users", {
   email: varchar("email", { length: 320 }),
   /** Hash bcrypt da senha (auth local por email+senha) */
   passwordHash: varchar("passwordHash", { length: 255 }),
+  /** Taxista que indicou (nome ou WhatsApp) — programa "taxista que indica ganha" */
+  referredBy: varchar("referredBy", { length: 255 }),
   avatar: text("avatar"),
   role: mysqlEnum("role", ["user", "admin"]).default("user").notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
@@ -70,6 +72,8 @@ export const leads = mysqlTable(
     whatsapp: varchar("whatsapp", { length: 32 }).notNull(),
     email: varchar("email", { length: 320 }),
     source: mysqlEnum("source", ["simulador", "pre_analise"]).notNull(),
+    /** Taxista que indicou (nome ou WhatsApp) */
+    referredBy: varchar("referredBy", { length: 255 }),
     quizAnswers: json("quizAnswers"),
     eligibilityResult: mysqlEnum("eligibilityResult", [
       "elegivel",

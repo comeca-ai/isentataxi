@@ -94,6 +94,7 @@ export const simulatorRouter = createRouter({
         name: z.string().min(2, "Informe seu nome"),
         whatsapp: z.string().min(8, "Informe um WhatsApp válido"),
         email: z.string().email("E-mail inválido").optional(),
+        referredBy: z.string().trim().max(255).optional(),
         simulationSnapshot: z.record(z.string(), z.unknown()).optional(),
       }),
     )
@@ -106,6 +107,7 @@ export const simulatorRouter = createRouter({
           whatsapp: input.whatsapp,
           email: input.email ?? null,
           source: "simulador",
+          referredBy: input.referredBy || null,
           simulationSnapshot: input.simulationSnapshot ?? null,
         })
         .$returningId();

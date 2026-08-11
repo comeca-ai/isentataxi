@@ -26,7 +26,7 @@ export default function SectionQuemPode() {
               <CheckItem>
                 CNH com <strong className="text-text-primary">EAR</strong> (exerce atividade remunerada).
               </CheckItem>
-              <CheckItem>Cursos obrigatórios em dia (conduta, primeiros socorros, mecânica básica).</CheckItem>
+              <CheckItem>Curso obrigatório em dia (<strong className="text-text-primary">Condutax</strong>).</CheckItem>
               <CheckItem>
                 Carência respeitada: <strong className="text-text-primary">2 anos</strong> desde o último
                 benefício (sobe para 3 em 2027 — use até 2026 e fique na regra dos 2).

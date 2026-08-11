@@ -98,6 +98,7 @@ export default function PreAnalise() {
         {
           name,
           whatsapp,
+          referredBy: finalAnswers.contato_indicacao?.trim() || undefined,
           answers: payloadAnswers,
           result: evalResult.result,
           score: evalResult.score,
@@ -166,6 +167,7 @@ export default function PreAnalise() {
         {
           name: contact?.name ?? answers.contato_nome ?? 'Não informado',
           whatsapp,
+          referredBy: answers.contato_indicacao?.trim() || undefined,
           answers: { ...answers, _abandono: true },
           result: evalResult.result,
           score: evalResult.score,

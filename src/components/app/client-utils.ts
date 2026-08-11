@@ -91,7 +91,7 @@ export const DOC_CHECKLIST: DocGroup[] = [
     icon: 'building',
     items: [
       { key: 'alvara', docType: 'alvara', name: 'Alvará de taxista (SVAT)', required: true, note: 'PDF ou foto nítida, dentro da validade' },
-      { key: 'certidao_cursos', docType: 'certidao_cursos', name: 'Certificado dos cursos obrigatórios', required: true, note: 'Conduta, primeiros socorros, mecânica básica' },
+      { key: 'certidao_cursos', docType: 'certidao_cursos', name: 'Certificado do curso Condutax', required: true, note: 'Curso obrigatório para taxistas de SP' },
       { key: 'dtp_protocolo', docType: 'dtp_protocolo', name: 'Formulário SP156 preenchido', required: true, note: 'Geramos pré-preenchido com seu cadastro — baixe, assine, reenvie' },
     ],
   },
