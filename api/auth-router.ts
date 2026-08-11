@@ -4,6 +4,7 @@ import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { Session } from "@contracts/constants";
 import { getSessionCookieOptions } from "./lib/cookies";
+import { sendWelcomeEmail } from "./lib/email";
 import { createRouter, publicQuery } from "./middleware";
 import { signSessionToken } from "./session";
 import {
@@ -121,6 +122,8 @@ export const authRouter = createRouter({
         });
       }
       await setSessionCookie(ctx, user.unionId);
+      // Boas-vindas (fire-and-forget — nunca bloqueia o cadastro)
+      void sendWelcomeEmail(user.email ?? input.email, user.name ?? input.name);
       return user;
     }),
 

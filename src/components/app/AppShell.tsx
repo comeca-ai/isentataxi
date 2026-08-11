@@ -65,7 +65,7 @@ function AppShellContent({ children }: { children: ReactNode }) {
   const initial = (user?.name?.trim().charAt(0) ?? 'U').toUpperCase();
 
   return (
-    <div className="min-h-[100dvh] bg-bg-base text-text-primary">
+    <div className="app-light min-h-[100dvh] bg-bg-base text-text-primary">
       {/* Sidebar (desktop) */}
       <aside
         className={cn(

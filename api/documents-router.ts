@@ -6,6 +6,7 @@ import { documents, users } from "@db/schema";
 import { createRouter, authedQuery, adminQuery } from "./middleware";
 import { getDb } from "./queries/connection";
 import { writeEvent } from "./queries/events";
+import { sendDocApprovedEmail, sendDocRejectedEmail } from "./lib/email";
 
 const MAX_SIZE_BYTES = 5 * 1024 * 1024;
 const ALLOWED_MIME = new Set([
@@ -198,6 +199,21 @@ export const documentsRouter = createRouter({
           reviewedAt: new Date(),
         })
         .where(and(eq(documents.id, input.documentId)));
+
+      // E-mail transacional (fire-and-forget)
+      const [owner] = await db
+        .select({ email: users.email, name: users.name })
+        .from(users)
+        .where(eq(users.id, doc.userId))
+        .limit(1);
+      if (owner?.email) {
+        const docName = DOC_TYPES[doc.docType as DocType] ?? doc.docType;
+        if (input.approve) {
+          void sendDocApprovedEmail(owner.email, owner.name ?? "", docName);
+        } else {
+          void sendDocRejectedEmail(owner.email, owner.name ?? "", docName, input.rejectionReason ?? "");
+        }
+      }
 
       await writeEvent({
         userId: doc.userId,

@@ -32,6 +32,51 @@
     --sidebar-accent-foreground: 0 0% 98%;
     --sidebar-border: 240 4% 16%;
     --sidebar-ring: 48 96% 53%;
+
+    /* IsentaTáxi semantic tokens (dark = padrão do site público) */
+    --c-bg-base: #0A0A0B;
+    --c-bg-surface: #131316;
+    --c-bg-elevated: #1B1B1F;
+    --c-text-primary: #FAFAFA;
+    --c-text-muted: #A1A1AA;
+    --c-text-faint: #71717A;
+    --c-border-subtle: #27272A;
+    --c-border-strong: #3F3F46;
+  }
+
+  /* Escopo claro — área logada do motorista (/app) */
+  .app-light {
+    --c-bg-base: #F4F4F2;
+    --c-bg-surface: #FFFFFF;
+    --c-bg-elevated: #F8F8F6;
+    --c-text-primary: #18181B;
+    --c-text-muted: #52525B;
+    --c-text-faint: #8E8E96;
+    --c-border-subtle: #E4E4E7;
+    --c-border-strong: #D4D4D8;
+
+    /* shadcn/ui tokens no claro (dialogs, selects, inputs dentro de /app) */
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+  }
+
+  /* Ajustes de contraste no escopo claro */
+  .app-light .text-taxi-yellow {
+    color: #A16207; /* amarelo escuro legível sobre fundo claro */
+  }
+  .app-light .bg-taxi-yellow,
+  .app-light .bg-taxi-yellow-hover {
+    color: #0A0A0B; /* texto sempre escuro sobre botões amarelos */
   }
 }
 

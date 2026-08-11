@@ -17,4 +17,7 @@ export const env = {
   /** Bootstrap do primeiro admin: criado no boot se não existir */
   adminEmail: process.env.ADMIN_EMAIL ?? "",
   adminPassword: process.env.ADMIN_PASSWORD ?? "",
+  /** E-mails transacionais (Resend) — vazio = no-op com log */
+  resendApiKey: process.env.RESEND_API_KEY ?? "",
+  emailFrom: process.env.EMAIL_FROM ?? "IsentaTáxi <ola@isentataxi.com.br>",
 };

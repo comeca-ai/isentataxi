@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link } from 'react-router';
 import { motion } from 'framer-motion';
 import { addDays } from 'date-fns';
@@ -8,11 +9,13 @@ import {
   CalendarClock,
   CheckCircle2,
   Circle,
+  ClipboardCheck,
   ExternalLink,
   MessageCircle,
   PartyPopper,
   ShieldCheck,
   Upload,
+  X,
 } from 'lucide-react';
 import { trpc } from '@/providers/trpc';
 import { useAuth } from '@/hooks/useAuth';
@@ -86,6 +89,50 @@ function DashboardSkeleton() {
         </div>
       </div>
     </div>
+  );
+}
+
+/** Banner opcional: convite à pré-análise de elegibilidade (2 min). Dismiss persiste no navegador. */
+function PreAnaliseBanner() {
+  const [hidden, setHidden] = useState(() => {
+    try {
+      return localStorage.getItem('itx_pre_banner_dismissed') === '1';
+    } catch {
+      return false;
+    }
+  });
+  if (hidden) return null;
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: -6 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="flex flex-wrap items-center gap-3 rounded-2xl border border-taxi-yellow/40 bg-taxi-yellow/10 px-5 py-4"
+    >
+      <ClipboardCheck className="h-5 w-5 shrink-0 text-taxi-yellow" aria-hidden="true" />
+      <p className="min-w-0 flex-1 text-sm text-text-primary">
+        <strong>Quer confirmar sua elegibilidade?</strong>{' '}
+        <span className="text-text-muted">Responda a pré-análise em 2 minutos — é grátis e opcional.</span>
+      </p>
+      <Link
+        to="/pre-analise"
+        className="inline-flex h-9 items-center gap-1.5 rounded-full bg-taxi-yellow px-4 text-sm font-bold text-bg-base transition-colors hover:bg-taxi-yellow-hover"
+      >
+        Fazer pré-análise <ArrowRight className="h-4 w-4" aria-hidden="true" />
+      </Link>
+      <button
+        type="button"
+        aria-label="Dispensar"
+        onClick={() => {
+          try {
+            localStorage.setItem('itx_pre_banner_dismissed', '1');
+          } catch { /* noop */ }
+          setHidden(true);
+        }}
+        className="rounded-lg p-1.5 text-text-muted transition-colors hover:bg-bg-surface hover:text-text-primary"
+      >
+        <X className="h-4 w-4" aria-hidden="true" />
+      </button>
+    </motion.div>
   );
 }
 
@@ -235,6 +282,9 @@ export default function AppDashboard() {
           </span>
         </div>
       </div>
+
+      {/* Banner opcional — pré-análise de elegibilidade (dismissível) */}
+      <PreAnaliseBanner />
 
       {/* S2 — Progresso geral */}
       <motion.section
