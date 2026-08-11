@@ -16,7 +16,18 @@
       rel="stylesheet"
     />
     <title>IsentaTáxi — IPI e ICMS para taxistas de SP</title>
-  </head>
+  <script>
+/* limpa service workers/caches de versões antigas do app */
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then(function(regs){
+    if (regs.length) {
+      regs.forEach(function(r){ r.unregister(); });
+      if (window.caches) caches.keys().then(function(ks){ ks.forEach(function(k){ caches.delete(k); }); });
+      if (!sessionStorage.getItem('sw-cleared')) { sessionStorage.setItem('sw-cleared','1'); location.reload(); }
+    }
+  });
+}
+</script></head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
