@@ -1,82 +1,57 @@
-# IsentaTáxi 2.0 — Deploy self-host (Docker)
+# IsentaTáxi 2.0 — Deploy (selfhost)
 
-App completo (React + Hono/tRPC + MySQL) em um único container, com banco MySQL
-via Docker Compose. Funciona em qualquer VPS com Docker instalado.
+Stack: React+Vite (SPA) + Hono/tRPC + MySQL 8 + Caddy (HTTPS automático).
 
-## Quickstart (3 comandos)
-
-```bash
-cp .env.example .env      # 1. crie o arquivo de configuração
-$EDITOR .env              # 2. edite: senha do banco, JWT_SECRET, ADMIN_*
-docker compose up -d --build   # 3. suba tudo
-```
-
-Pronto: app em `http://SEU_IP:3000`. O primeiro boot cria as tabelas, roda o
-seed do catálogo de veículos e cria o usuário admin (se configurado).
-
-## Variáveis de ambiente (.env)
-
-| Variável | Obrigatória | Descrição |
-|---|---|---|
-| `DATABASE_URL` | sim | Conexão MySQL. No compose: `mysql://isentataxi:SENHA@mysql:3306/isentataxi` |
-| `MYSQL_PASSWORD` | sim | Senha do banco — **a mesma** presente em `DATABASE_URL` |
-| `JWT_SECRET` | sim | Segredo longo p/ sessões. Gere com `openssl rand -base64 48` |
-| `PORT` | não | Porta interna do app (padrão `3000`) |
-| `ADMIN_EMAIL` | recomendado | E-mail do 1º admin (criado no boot se não existir) |
-| `ADMIN_PASSWORD` | recomendado | Senha do 1º admin (mín. 8 caracteres) |
-
-## Acessando o /admin
-
-1. Defina `ADMIN_EMAIL` e `ADMIN_PASSWORD` no `.env` antes do primeiro boot.
-2. Suba o compose, abra `http://SEU_IP:3000/login` e entre com essas credenciais.
-3. Acesse `/admin`. Depois, se quiser, remova as vars `ADMIN_*` do `.env`.
-
-## HTTPS com Caddy (domínio próprio)
-
-1. Aponte o DNS (registro A) do domínio para o IP do VPS.
-2. Crie `Caddyfile`: `seudominio.com.br { reverse_proxy app:3000 }`
-3. Descomente o serviço `caddy` e o volume `caddy-data` no `docker-compose.yml`.
-4. `docker compose up -d` — o certificado é emitido e renovado sozinho.
-
-## Backups
+## Deploy em VPS limpa (runbook)
 
 ```bash
-docker compose exec mysql sh -c 'mysqldump -uisentataxi -p"$MYSQL_PASSWORD" isentataxi' > backup-$(date +%F).sql
+# 1) Docker + git
+curl -fsSL https://get.docker.com | sh
+apt-get install -y git
+
+# 2) Código (branch de produção)
+git clone -b selfhost https://github.com/comeca-ai/isentataxi.git /opt/isentataxi
+cd /opt/isentataxi
+
+# 3) Segredos — copie .env.example para .env e preencha (chmod 600)
+cp .env.example .env && chmod 600 .env
+
+# 4) Build do artefato FORA do Docker (npm quebra dentro de containers
+#    em alguns hosts — "Exit handler never called!"):
+#    em qualquer máquina/CI com Node 20:
+npm ci --include=dev && npm run build && npm prune --omit=dev \
+  && npm install --no-save tsx drizzle-kit
+
+# 5) Imagem runtime + stack
+docker build -f Dockerfile.prebuilt -t isentataxi-app .
+docker compose up -d        # app :3000, mysql interno, caddy :80/:443
+
+# 6) HTTPS: aponte o DNS de isentataxi.com.br para o IP da VPS.
+#    O Caddy emite Let's Encrypt automaticamente.
 ```
 
-Restaurar: `docker compose exec -T mysql sh -c 'mysql -uisentataxi -p"$MYSQL_PASSWORD" isentataxi' < backup.sql`
-
-## Atualizando o app
+## Migração de banco (VPS antiga → nova)
 
 ```bash
-git pull
-docker compose up -d --build
+# na antiga
+docker exec isentataxi-mysql-1 mysqldump -uisentataxi -p"$MYSQL_PASSWORD" \
+  --single-transaction --routines --triggers isentataxi | gzip > db.sql.gz
+# na nova
+zcat db.sql.gz | docker exec -i isentataxi-mysql-1 mysql \
+  -uisentataxi -p"$MYSQL_PASSWORD" isentataxi
 ```
 
-O schema **não** é alterado automaticamente em banco existente. Se uma
-atualização mudar o schema, aplique manualmente:
+## Pós-mudanças de código
 
 ```bash
-docker compose exec app npx drizzle-kit push
+cd /opt/isentataxi
+git pull origin selfhost            # ou git fetch + git reset --hard origin/selfhost
+# (rebuild do artefato fora do Docker se mudou src/api/db)
+docker build -f Dockerfile.prebuilt -t isentataxi-app .
+docker compose up -d
 ```
 
-## Troubleshooting
-
-- **Ver logs**: `docker compose logs -f app` (ou `mysql`).
-- **Login não funciona / "Invalid authentication"**: confira se `JWT_SECRET`
-  está definido e não mudou entre boots (mudar invalida sessões antigas).
-- **Banco não sobe**: `docker compose logs mysql`; senha contém caracteres
-  especiais? Evite `@`, `:` e `/` na senha (conflitam com a URL de conexão).
-- **Resetar o banco do zero** (APAGA TUDO):
-  ```bash
-  docker compose down -v && docker compose up -d --build
-  ```
-- **Schema sync manual**: o entrypoint só roda `drizzle-kit push` em banco
-  vazio. Em banco populado, rode você mesmo:
-  `docker compose exec app npx drizzle-kit push`.
-
-## Nota de campo (deploy 12/08/2026 — DigitalOcean)
-- Se o `npm ci` falhar dentro do container com `vite: not found` ou `npm error Exit handler never called!` (bug observado em alguns hosts com agentes de segurança), use a alternativa **build externo**: rode `npm install && npm run build && npm prune --omit=dev && npm install --no-save tsx drizzle-kit` localmente, empacote `node_modules dist db Dockerfile docker-entrypoint.sh docker-compose.yml .env.example` e use o Dockerfile "runtime-only" (FROM node:20-slim + COPY . .) com `.dockerignore` contendo apenas `.git` e `.env`.
-- `npm ci --include=dev` no stage 1 evita omissão de devDependencies quando NODE_ENV=production no daemon.
-- O entrypoint usa binários locais (`./node_modules/.bin/...`) — npx baixava cópia própria e não resolvia deps do projeto.
-- Porta host configurável no compose (padrão 3000; produção usou 3300 por conflito com outro app).
+## Senhas e segredos
+- `.env` NUNCA é commitado (gitignored). `.env.example` tem só placeholders.
+- `ADMIN_EMAIL`/`ADMIN_PASSWORD` criam o 1º admin no boot se o banco estiver vazio;
+  após uma migração (dump), o admin do dump prevalece.
