@@ -74,3 +74,9 @@ docker compose exec app npx drizzle-kit push
 - **Schema sync manual**: o entrypoint só roda `drizzle-kit push` em banco
   vazio. Em banco populado, rode você mesmo:
   `docker compose exec app npx drizzle-kit push`.
+
+## Nota de campo (deploy 12/08/2026 — DigitalOcean)
+- Se o `npm ci` falhar dentro do container com `vite: not found` ou `npm error Exit handler never called!` (bug observado em alguns hosts com agentes de segurança), use a alternativa **build externo**: rode `npm install && npm run build && npm prune --omit=dev && npm install --no-save tsx drizzle-kit` localmente, empacote `node_modules dist db Dockerfile docker-entrypoint.sh docker-compose.yml .env.example` e use o Dockerfile "runtime-only" (FROM node:20-slim + COPY . .) com `.dockerignore` contendo apenas `.git` e `.env`.
+- `npm ci --include=dev` no stage 1 evita omissão de devDependencies quando NODE_ENV=production no daemon.
+- O entrypoint usa binários locais (`./node_modules/.bin/...`) — npx baixava cópia própria e não resolvia deps do projeto.
+- Porta host configurável no compose (padrão 3000; produção usou 3300 por conflito com outro app).
