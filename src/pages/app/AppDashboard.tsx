@@ -13,6 +13,7 @@ import {
   ExternalLink,
   MessageCircle,
   PartyPopper,
+  Share2,
   ShieldCheck,
   Upload,
   X,
@@ -89,6 +90,48 @@ function DashboardSkeleton() {
         </div>
       </div>
     </div>
+  );
+}
+
+/** Card "taxista que indica ganha": contador de indicados + texto pronto p/ WhatsApp */
+function ReferralCard() {
+  const { user } = useAuth();
+  const { data } = trpc.profile.myReferrals.useQuery();
+  const msg = encodeURIComponent(
+    `Sou taxista e estou comprando meu carro com isenção de IPI/ICMS/IPVA pelo IsentaTáxi — economia de até R$ 45 mil. Simule grátis: https://isentataxi.com.br/simulador — e coloque meu nome (${user?.name ?? 'seu colega'}) em "Quem te indicou?"!`,
+  );
+  return (
+    <motion.section
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.1, duration: 0.28, ease: 'easeOut' }}
+      className="flex flex-wrap items-center gap-5 rounded-2xl border border-taxi-yellow/40 bg-taxi-yellow/10 p-6"
+      aria-label="Programa de indicação"
+    >
+      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-taxi-yellow text-bg-base">
+        <Share2 className="h-5 w-5" aria-hidden="true" />
+      </div>
+      <div className="min-w-0 flex-1">
+        <h2 className="text-lg font-bold text-text-primary">Taxista que indica ganha</h2>
+        <p className="mt-0.5 text-sm text-text-muted">
+          Indique colegas taxistas: a cada um que fechar o processo, você ganha{' '}
+          <strong className="text-text-primary">R$ {data?.reward ?? 50}</strong>.{' '}
+          {data != null && (
+            <span className="font-mono text-text-primary">
+              Você já indicou: {data.count}
+            </span>
+          )}
+        </p>
+      </div>
+      <a
+        href={`https://wa.me/?text=${msg}`}
+        target="_blank"
+        rel="noreferrer"
+        className="inline-flex h-11 items-center gap-2 rounded-full bg-taxi-yellow px-5 text-sm font-bold text-bg-base transition-colors hover:bg-taxi-yellow-hover"
+      >
+        <Share2 className="h-4 w-4" aria-hidden="true" /> Compartilhar no WhatsApp
+      </a>
+    </motion.section>
   );
 }
 
@@ -285,6 +328,9 @@ export default function AppDashboard() {
 
       {/* Banner opcional — pré-análise de elegibilidade (dismissível) */}
       <PreAnaliseBanner />
+
+      {/* Programa de indicação */}
+      <ReferralCard />
 
       {/* S2 — Progresso geral */}
       <motion.section

@@ -86,6 +86,47 @@ export async function sendDocRejectedEmail(
   });
 }
 
+/** Lembrete: prazo de 30 dias do IPVA (prova SIVEI pós-compra) */
+export async function sendIpvaDeadlineEmail(
+  to: string,
+  name: string,
+  daysLeft: number,
+): Promise<void> {
+  const first = name.trim().split(" ")[0] || "taxista";
+  const urgente = daysLeft <= 3;
+  await send({
+    to,
+    subject: urgente
+      ? `URGENTE: ${daysLeft} dia(s) para garantir sua isenção de IPVA`
+      : `Lembrete: ${daysLeft} dias para o prazo do IPVA`,
+    html: shell(
+      urgente ? `${first}, é agora ou multa!` : `${first}, fique de olho no prazo.`,
+      `<p>Após a compra do veículo, você tem <strong style="color:#FAFAFA">30 dias</strong> para comprovar a isenção de IPVA junto à SEFAZ-SP (via SIVEI).</p>
+       <p><strong style="color:#FACC15">Restam ${daysLeft} dia(s).</strong> Perdeu o prazo = IPVA cobrado + possível multa.</p>
+       <p>Envie a NF-e pelo painel (Meus documentos) que nós protocolamos pra você.</p>`,
+    ),
+  });
+}
+
+/** Lembrete: licenciamento anual (não é isento — R$ 174,08 em 2026) */
+export async function sendLicenciamentoEmail(
+  to: string,
+  name: string,
+  monthLabel: string,
+  plateFinal: string,
+): Promise<void> {
+  const first = name.trim().split(" ")[0] || "taxista";
+  await send({
+    to,
+    subject: `Licenciamento ${monthLabel}: seu mês chegou (placa final ${plateFinal})`,
+    html: shell(
+      `${first}, mês do seu licenciamento!`,
+      `<p>Pela placa final <strong style="color:#FAFAFA">${plateFinal}</strong>, seu licenciamento vence em <strong style="color:#FAFAFA">${monthLabel}</strong> (R$ 174,08 em 2026 — este <strong style="color:#FACC15">não é isento</strong>).</p>
+       <p>Aproveite para emitir a certidão de débitos e manter o veículo 100% regular — pendências travam benefícios futuros.</p>`,
+    ),
+  });
+}
+
 /** Alerta de documento aprovado (positivo, mantém engajamento) */
 export async function sendDocApprovedEmail(to: string, name: string, docName: string): Promise<void> {
   const first = name.trim().split(" ")[0] || "taxista";

@@ -1,6 +1,7 @@
-import { eq } from "drizzle-orm";
+import { and, eq, ne, or, sql } from "drizzle-orm";
 import { z } from "zod";
-import { profiles } from "@db/schema";
+import { leads, profiles, users } from "@db/schema";
+import { REFERRAL_REWARD } from "@contracts/constants";
 import { createRouter, authedQuery } from "./middleware";
 import { getDb } from "./queries/connection";
 
@@ -33,6 +34,44 @@ const profileInput = z.object({
 });
 
 export const profileRouter = createRouter({
+
+  /** Programa "taxista que indica ganha": quantos indicados citaram este usuário */
+  myReferrals: authedQuery.query(async ({ ctx }) => {
+    const db = getDb();
+    const me = ctx.user!;
+    const [myProfile] = await db
+      .select({ phone: profiles.phone })
+      .from(profiles)
+      .where(eq(profiles.userId, me.id))
+      .limit(1);
+
+    // Identidades que o indicado pode ter escrito no campo "quem te indicou"
+    const needles = [me.name, me.email, myProfile?.phone]
+      .filter((v): v is string => Boolean(v && v.trim().length >= 4))
+      .map((v) => v.trim().toLowerCase());
+    const phoneDigits = (myProfile?.phone ?? "").replace(/\D/g, "");
+    if (phoneDigits.length >= 10) needles.push(phoneDigits);
+
+    const match = (col: typeof users.referredBy | typeof leads.referredBy) =>
+      needles.length === 0
+        ? sql`1 = 0`
+        : or(...needles.map((n) => sql`LOWER(${col}) LIKE ${"%" + n + "%"}`));
+
+    const [u] = await db
+      .select({ n: sql<number>`count(*)` })
+      .from(users)
+      .where(and(match(users.referredBy), ne(users.id, me.id)));
+    const [l] = await db
+      .select({ n: sql<number>`count(*)` })
+      .from(leads)
+      .where(match(leads.referredBy));
+
+    return {
+      count: Number(u?.n ?? 0) + Number(l?.n ?? 0),
+      reward: REFERRAL_REWARD,
+    };
+  }),
+
   /** Perfil do usuário logado (null se ainda não preencheu) */
   get: authedQuery.query(async ({ ctx }) => {
     const [row] = await getDb()

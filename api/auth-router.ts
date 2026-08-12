@@ -5,7 +5,8 @@ import { z } from "zod";
 import { Session } from "@contracts/constants";
 import { getSessionCookieOptions } from "./lib/cookies";
 import { sendWelcomeEmail } from "./lib/email";
-import { createRouter, publicQuery } from "./middleware";
+import { updateUserPassword } from "./queries/users";
+import { createRouter, authedQuery, publicQuery } from "./middleware";
 import { signSessionToken } from "./session";
 import {
   createUser,
@@ -125,6 +126,29 @@ export const authRouter = createRouter({
       // Boas-vindas (fire-and-forget — nunca bloqueia o cadastro)
       void sendWelcomeEmail(user.email ?? input.email, user.name ?? input.name);
       return user;
+    }),
+
+  /** Troca de senha do usuário logado (exige a senha atual) */
+  changePassword: authedQuery
+    .input(
+      z.object({
+        currentPassword: z.string().min(1, "Informe a senha atual"),
+        newPassword: z.string().min(8, "A nova senha deve ter pelo menos 8 caracteres"),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const user = await findUserByEmail(ctx.user!.unionId);
+      const ok =
+        user?.passwordHash != null &&
+        (await bcrypt.compare(input.currentPassword, user.passwordHash));
+      if (!user || !ok) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "Senha atual incorreta.",
+        });
+      }
+      await updateUserPassword(user.unionId, await bcrypt.hash(input.newPassword, 10));
+      return { ok: true };
     }),
 
   login: publicQuery

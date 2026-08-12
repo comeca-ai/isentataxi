@@ -6,6 +6,7 @@ import {
   ChevronsLeft,
   ChevronsRight,
   FolderUp,
+  KeyRound,
   LayoutDashboard,
   LogOut,
   MessageCircle,
@@ -14,6 +15,7 @@ import {
 import { STAGES } from '@contracts/constants';
 import RequireAuth from '@/components/RequireAuth';
 import { useAuth } from '@/hooks/useAuth';
+import { toast } from 'sonner';
 import { trpc } from '@/providers/trpc';
 import { cn } from '@/lib/utils';
 
@@ -167,6 +169,7 @@ function AppShellContent({ children }: { children: ReactNode }) {
                   <p className="truncate text-sm font-medium text-text-primary">{user?.name ?? 'Minha conta'}</p>
                   {user?.email && <p className="truncate text-xs text-text-faint">{user.email}</p>}
                 </div>
+                <ChangePasswordItem />
                 <button
                   onClick={() => logout()}
                   className="mt-1 flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm text-text-muted transition-colors hover:bg-bg-surface hover:text-text-primary"
@@ -217,5 +220,85 @@ function AppShellContent({ children }: { children: ReactNode }) {
         )}
       </nav>
     </div>
+  );
+}
+
+/** Item do menu da conta: abre dialog inline para trocar a senha */
+function ChangePasswordItem() {
+  const [open, setOpen] = useState(false);
+  const [current, setCurrent] = useState('');
+  const [next, setNext] = useState('');
+  const changePassword = trpc.auth.changePassword.useMutation({
+    onSuccess: () => {
+      toast.success('Senha alterada com sucesso!');
+      setOpen(false);
+      setCurrent('');
+      setNext('');
+    },
+    onError: (err) => toast.error(err.message),
+  });
+
+  return (
+    <>
+      <button
+        onClick={() => setOpen(true)}
+        className="mt-1 flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm text-text-muted transition-colors hover:bg-bg-surface hover:text-text-primary"
+      >
+        <KeyRound className="h-4 w-4" /> Trocar senha
+      </button>
+      {open && (
+        <div
+          className="fixed inset-0 z-[90] flex items-center justify-center bg-black/50 p-5 backdrop-blur-sm"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Trocar senha"
+          onClick={() => setOpen(false)}
+        >
+          <form
+            onClick={(e) => e.stopPropagation()}
+            onSubmit={(e) => {
+              e.preventDefault();
+              changePassword.mutate({ currentPassword: current, newPassword: next });
+            }}
+            className="w-full max-w-sm space-y-4 rounded-2xl border border-border-subtle bg-bg-surface p-6 shadow-xl"
+          >
+            <h3 className="text-lg font-bold text-text-primary">Trocar senha</h3>
+            <div className="space-y-2">
+              <label htmlFor="cp-current" className="text-sm font-medium text-text-muted">Senha atual</label>
+              <input
+                id="cp-current"
+                type="password"
+                required
+                autoComplete="current-password"
+                value={current}
+                onChange={(e) => setCurrent(e.target.value)}
+                className="h-11 w-full rounded-xl border border-border-subtle bg-bg-elevated px-4 text-text-primary outline-none focus:border-taxi-yellow"
+              />
+            </div>
+            <div className="space-y-2">
+              <label htmlFor="cp-next" className="text-sm font-medium text-text-muted">Nova senha</label>
+              <input
+                id="cp-next"
+                type="password"
+                required
+                minLength={8}
+                autoComplete="new-password"
+                placeholder="Mínimo 8 caracteres"
+                value={next}
+                onChange={(e) => setNext(e.target.value)}
+                className="h-11 w-full rounded-xl border border-border-subtle bg-bg-elevated px-4 text-text-primary outline-none focus:border-taxi-yellow"
+              />
+            </div>
+            <button
+              type="submit"
+              disabled={changePassword.isPending || current.length === 0 || next.length < 8}
+              className="flex h-11 w-full items-center justify-center rounded-full bg-taxi-yellow font-bold text-bg-base transition-colors hover:bg-taxi-yellow-hover disabled:opacity-50"
+            >
+              {changePassword.isPending ? 'Salvando…' : 'Salvar nova senha'}
+            </button>
+          </form>
+        </div>
+      )}
+    </>
   );
 }

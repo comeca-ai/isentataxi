@@ -123,6 +123,9 @@ export const IPVA_FIRST_YEAR_NOTE =
 /** Prazo para pedir a isenção no SIVEI em carro 0 km (dias após a NF-e) */
 export const IPVA_ZERO_KM_DEADLINE_DAYS = 30;
 
+/** Programa "taxista que indica ganha" — recompensa por indicado que fechar */
+export const REFERRAL_REWARD = 50;
+
 /** Licenciamento anual Detran-SP 2026 — NÃO é isento. Calendário estimado. */
 export const LICENCIAMENTO_2026 = {
   valor: 174.08,

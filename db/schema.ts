@@ -139,6 +139,25 @@ export const profiles = mysqlTable(
       .$onUpdate(() => new Date()),
   });
 
+/** Controle de lembretes automáticos já enviados (evita duplicados) */
+export const emailReminders = mysqlTable(
+  "email_reminders",
+  {
+    id: serial("id").primaryKey(),
+    userId: bigint("userId", { mode: "number", unsigned: true })
+      .notNull()
+      .references(() => users.id),
+    /** ipva30_aviso | ipva30_urgente | licenciamento */
+    kind: varchar("kind", { length: 32 }).notNull(),
+    /** Chave de deduplicação (ex.: data da compra ou "2026-07") */
+    refKey: varchar("refKey", { length: 32 }).notNull(),
+    sentAt: timestamp("sentAt").defaultNow().notNull(),
+  },
+  (table) => ({
+    dedup: unique("email_reminders_dedup").on(table.userId, table.kind, table.refKey),
+  }),
+);
+
 export type Profile = typeof profiles.$inferSelect;
 export type InsertProfile = typeof profiles.$inferInsert;
 

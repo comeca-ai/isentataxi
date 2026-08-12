@@ -26,6 +26,11 @@ export async function createUser(data: InsertUser) {
   return findUserByUnionId(data.unionId!);
 }
 
+export async function updateUserPassword(unionId: string, passwordHash: string) {
+  const db = getDb();
+  await db.update(schema.users).set({ passwordHash }).where(eq(schema.users.unionId, unionId));
+}
+
 export async function touchLastSignIn(unionId: string) {
   await getDb()
     .update(schema.users)

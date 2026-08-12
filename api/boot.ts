@@ -7,6 +7,7 @@ import { appRouter } from "./router";
 import { createContext } from "./context";
 import { env } from "./lib/env";
 import { createUser, findUserByEmail } from "./queries/users";
+import { startReminderScheduler } from "./lib/reminders";
 
 const app = new Hono<{ Bindings: HttpBindings }>();
 
@@ -60,6 +61,7 @@ if (env.isProduction) {
   serveStaticFiles(app);
 
   await bootstrapAdmin();
+  startReminderScheduler();
 
   const port = parseInt(process.env.PORT || "3000");
   serve({ fetch: app.fetch, port }, () => {
