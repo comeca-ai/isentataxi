@@ -20,6 +20,10 @@ const FAQS = [
     a: 'Acompanhamos as mudanças e avisamos os clientes ativos. O que já foi protocolado segue a regra vigente na data do pedido.',
   },
   {
+    q: 'E as guias/taxas — precisam estar pagas?',
+    a: 'Sim. O protocolo da isenção é gratuito, mas taxas como laudo/vistoria do Detran e o licenciamento anual (R$ 174,08) precisam estar quitadas. O comprovante da guia paga é enviado pelo painel e conferido pela nossa equipe antes do protocolo — guia em aberto trava o processo.',
+  },
+  {
     q: 'IPVA entra?',
     a: 'Possível benefício adicional, avaliado caso a caso — depende de regra estadual e municipal. Sem promessa: o que está em lei hoje é IPI + ICMS.',
   },

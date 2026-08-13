@@ -34,6 +34,10 @@ const FAQS = [
     a: 'Só após 2 anos rodando como táxi, senão devolve o imposto proporcional.',
   },
   {
+    q: 'Preciso enviar guias? Elas precisam estar pagas?',
+    a: 'Sim. Guias e taxas do processo (ex.: laudo/vistoria do Detran e o licenciamento anual, R$ 174,08 — este não é isento) precisam estar quitadas. Você fotografa ou sobe o PDF do comprovante pelo painel e nossa equipe confere antes de protocolar — guia em aberto trava o processo no órgão.',
+  },
+  {
     q: 'E se o órgão negar?',
     a: 'Quem defere é o órgão público; a pré-análise existe exatamente para filtrar risco antes de você pagar qualquer coisa.',
   },
