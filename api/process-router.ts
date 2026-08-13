@@ -6,6 +6,10 @@ import { processes, processStages, users } from "@db/schema";
 import { createRouter, authedQuery, adminQuery } from "./middleware";
 import { getDb } from "./queries/connection";
 import { writeEvent } from "./queries/events";
+import { sendPaymentConfirmedEmail } from "./lib/email";
+
+/** Etapas que exigem pagamento confirmado (execução/protocolos) */
+const PAID_GATE_STAGE = 3;
 
 const stageStatusEnum = z.enum([
   "pendente",
@@ -96,6 +100,53 @@ export const processRouter = createRouter({
     }));
   }),
 
+  /** Confirma (ou estorna) o pagamento do serviço — libera etapas 3+ (admin) */
+  markPaid: adminQuery
+    .input(
+      z.object({
+        processId: z.number().int().positive(),
+        paid: z.boolean(),
+      }),
+    )
+    .mutation(async ({ input }) => {
+      const db = getDb();
+      const [process] = await db
+        .select()
+        .from(processes)
+        .where(eq(processes.id, input.processId))
+        .limit(1);
+      if (!process) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "Processo não encontrado." });
+      }
+      await db
+        .update(processes)
+        .set({ paidAt: input.paid ? new Date() : null })
+        .where(eq(processes.id, input.processId));
+
+      if (input.paid) {
+        const [owner] = await db
+          .select({ email: users.email, name: users.name })
+          .from(users)
+          .where(eq(users.id, process.userId))
+          .limit(1);
+        if (owner?.email) {
+          void sendPaymentConfirmedEmail(owner.email, owner.name ?? "");
+        }
+      }
+
+      await writeEvent({
+        userId: process.userId,
+        actorRole: "equipe",
+        kind: "pagamento",
+        message: input.paid
+          ? "Pagamento do serviço confirmado — execução liberada"
+          : "Confirmação de pagamento estornada",
+        meta: { paid: input.paid },
+      });
+
+      return { ok: true, paid: input.paid };
+    }),
+
   /** Atualiza o status de uma etapa, respeitando dependências (admin) */
   updateStage: adminQuery
     .input(
@@ -122,6 +173,20 @@ export const processRouter = createRouter({
         throw new TRPCError({
           code: "NOT_FOUND",
           message: "Processo não encontrado.",
+        });
+      }
+
+      // Regra de negócio: etapas de execução (3+) exigem pagamento confirmado
+      if (
+        input.stage >= PAID_GATE_STAGE &&
+        input.status !== "pendente" &&
+        input.status !== "bloqueada" &&
+        !process.paidAt
+      ) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message:
+            "Pagamento do cliente ainda não confirmado — confirme no botão acima antes de avançar esta etapa.",
         });
       }
 

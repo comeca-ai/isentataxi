@@ -11,6 +11,7 @@ import {
   Circle,
   ClipboardCheck,
   ExternalLink,
+  Lock,
   MessageCircle,
   PartyPopper,
   Share2,
@@ -90,6 +91,56 @@ function DashboardSkeleton() {
         </div>
       </div>
     </div>
+  );
+}
+
+/** Card de pagamento do serviço — aparece após o envio da 1ª guia paga; some quando pago */
+function PaymentCard({ paidAt, hasGuiaPaga }: { paidAt: string | Date | null | undefined; hasGuiaPaga: boolean }) {
+  if (paidAt) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="flex items-center gap-3 rounded-2xl border border-money-green/40 bg-money-green/10 px-5 py-4"
+      >
+        <CheckCircle2 className="h-5 w-5 shrink-0 text-money-green" aria-hidden="true" />
+        <p className="text-sm text-text-primary">
+          <strong>Pagamento confirmado</strong>
+          <span className="text-text-muted"> — execução dos protocolos liberada. Estamos trabalhando no seu processo.</span>
+        </p>
+      </motion.div>
+    );
+  }
+  if (!hasGuiaPaga) return null;
+  return (
+    <motion.section
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="rounded-2xl border-2 border-taxi-yellow bg-taxi-yellow/10 p-6"
+      aria-label="Pagamento do serviço"
+    >
+      <div className="flex flex-wrap items-center gap-5">
+        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-taxi-yellow text-bg-base">
+          <Lock className="h-5 w-5" aria-hidden="true" />
+        </div>
+        <div className="min-w-0 flex-1">
+          <h2 className="text-lg font-bold text-text-primary">Primeira guia paga enviada — hora de executar!</h2>
+          <p className="mt-1 text-sm text-text-muted">
+            Sua documentação está caminhando. Para darmos sequência aos protocolos (etapas 3 a 8), o serviço é{' '}
+            <strong className="text-text-primary">R$ 299, pagamento único</strong> — sem mensalidade.
+            Após a confirmação, as próximas etapas são liberadas automaticamente.
+          </p>
+        </div>
+        <a
+          href="https://wa.me/5511942299144?text=Enviei%20minha%20primeira%20guia%20paga%20e%20quero%20pagar%20o%20servi%C3%A7o%20(R%24%20299)%20para%20liberar%20a%20execu%C3%A7%C3%A3o"
+          target="_blank"
+          rel="noreferrer"
+          className="inline-flex h-12 items-center gap-2 rounded-full bg-taxi-yellow px-6 font-bold text-bg-base transition-colors hover:bg-taxi-yellow-hover"
+        >
+          Pagar R$ 299 e liberar <ArrowRight className="h-4 w-4" aria-hidden="true" />
+        </a>
+      </div>
+    </motion.section>
   );
 }
 
@@ -332,6 +383,9 @@ export default function AppDashboard() {
       {/* Programa de indicação */}
       <ReferralCard />
 
+      {/* Pagamento do serviço (gatilho: 1ª guia paga enviada) */}
+      <PaymentCard paidAt={derived.process.paidAt} hasGuiaPaga={derived.docs.some((d) => d.docType === 'guia_paga_taxa')} />
+
       {/* S2 — Progresso geral */}
       <motion.section
         initial={{ opacity: 0, y: 12 }}
@@ -503,6 +557,7 @@ export default function AppDashboard() {
               updatedAt: s.updatedAt,
             }))}
             currentStage={derived.currentStage}
+            paywalled={!derived.process.paidAt && derived.docs.some((d) => d.docType === 'guia_paga_taxa')}
             docs={derived.docs.map((d) => ({ id: d.id, docType: d.docType, fileName: d.fileName, status: d.status }))}
           />
         </motion.section>

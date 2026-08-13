@@ -55,6 +55,7 @@ export type DocType =
   | "sisen_protocolo"
   | "sivei_autorizacao"
   | "nota_fiscal"
+  | "guia_paga_taxa"
   | "outros";
 
 /** Labels pt-BR por tipo de documento */
@@ -69,6 +70,7 @@ export const DOC_TYPES: Record<DocType, string> = {
   sisen_protocolo: "Protocolo SISEN (IPI)",
   sivei_autorizacao: "Autorização SIVEI (ICMS)",
   nota_fiscal: "Nota fiscal do veículo",
+  guia_paga_taxa: "Comprovante de guia paga (taxa do processo)",
   outros: "Outros documentos",
 };
 

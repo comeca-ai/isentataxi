@@ -27,6 +27,7 @@ const docTypeEnum = z.enum([
   "sisen_protocolo",
   "sivei_autorizacao",
   "nota_fiscal",
+  "guia_paga_taxa",
   "outros",
 ]);
 

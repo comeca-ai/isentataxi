@@ -86,6 +86,20 @@ export async function sendDocRejectedEmail(
   });
 }
 
+/** Pagamento do serviço confirmado — libera a execução (etapas 3+) */
+export async function sendPaymentConfirmedEmail(to: string, name: string): Promise<void> {
+  const first = name.trim().split(" ")[0] || "taxista";
+  await send({
+    to,
+    subject: "Pagamento confirmado — estamos executando seu processo ✅",
+    html: shell(
+      `${first}, pagamento confirmado!`,
+      `<p>Recebemos a confirmação do seu pagamento. A partir de agora nossa equipe executa os protocolos do seu processo (DTP, Detran, SISEN e SIVEI) e você acompanha cada etapa pelo painel.</p>
+       <p>Qualquer pendência, avisamos por aqui e pelo seu painel.</p>`,
+    ),
+  });
+}
+
 /** Lembrete: prazo de 30 dias do IPVA (prova SIVEI pós-compra) */
 export async function sendIpvaDeadlineEmail(
   to: string,

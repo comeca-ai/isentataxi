@@ -124,6 +124,14 @@ export const DOC_CHECKLIST: DocGroup[] = [
     ],
   },
   {
+    key: 'taxas',
+    org: 'Taxas do processo (guias pagas)',
+    icon: 'receipt',
+    items: [
+      { key: 'guia_paga_taxa', docType: 'guia_paga_taxa', name: 'Comprovante de guia paga', required: true, note: 'A guia precisa estar PAGA — foto ou PDF do comprovante. Guia em aberto trava o processo' },
+    ],
+  },
+  {
     key: 'pos-compra',
     org: 'Concessionária / pós-compra',
     icon: 'key',

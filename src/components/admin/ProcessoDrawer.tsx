@@ -59,6 +59,14 @@ export default function ProcessoDrawer({
     onError: (err) => toast.warning('Movimento não permitido', { description: err.message }),
   });
 
+  const markPaid = trpc.process.markPaid.useMutation({
+    onSuccess: ({ paid }) => {
+      utils.process.listAll.invalidate();
+      toast.success(paid ? 'Pagamento confirmado — etapas 3+ liberadas' : 'Pagamento estornado');
+    },
+    onError: (err) => toast.error(err.message),
+  });
+
   const currentStageN = row?.process.currentStage ?? 1;
   const currentStageRow = row?.stages.find((s) => s.stage === currentStageN);
   const currentDef = STAGES.find((s) => s.n === currentStageN);
@@ -66,10 +74,26 @@ export default function ProcessoDrawer({
   const history = [...(row?.stages ?? [])].sort(
     (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
   );
+  const isPaid = Boolean(row?.process.paidAt);
   const posDeadlineDays = row?.process.postPurchaseDeadline
     // eslint-disable-next-line react-hooks/purity -- countdown relativo ao tempo atual é intencional
     ? Math.ceil((new Date(row.process.postPurchaseDeadline).getTime() - Date.now()) / 86_400_000)
     : null;
+
+  const paymentButton = (
+    <button
+      type="button"
+      disabled={markPaid.isPending}
+      onClick={() => row && markPaid.mutate({ processId: row.process.id, paid: !isPaid })}
+      className={
+        isPaid
+          ? 'flex h-11 w-full items-center justify-center gap-2 rounded-full border border-money-green/40 bg-money-green/10 text-sm font-bold text-money-green transition-colors hover:bg-money-green/20'
+          : 'flex h-11 w-full items-center justify-center gap-2 rounded-full bg-money-green text-sm font-bold text-bg-base transition-colors hover:bg-money-green/90 disabled:opacity-50'
+      }
+    >
+      {isPaid ? '✓ Pagamento confirmado (clique p/ estornar)' : 'Confirmar pagamento R$ 299'}
+    </button>
+  );
 
   const advance = () => {
     if (!row || !currentStageRow) return;
@@ -147,6 +171,9 @@ export default function ProcessoDrawer({
             </div>
 
             <div className="flex-1 space-y-5 overflow-y-auto p-5">
+              {/* Pagamento do serviço */}
+              {paymentButton}
+
               {/* Ações */}
               <div className="flex gap-2">
                 <Link

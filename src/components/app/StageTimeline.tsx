@@ -104,6 +104,7 @@ function StageItem({
   docs,
   expanded,
   onToggle,
+  paywalled,
 }: {
   def: Stage;
   row: StageRow | undefined;
@@ -112,13 +113,17 @@ function StageItem({
   docs: LinkedDoc[];
   expanded: boolean;
   onToggle: () => void;
+  paywalled?: boolean;
 }) {
   const status = row?.status ?? 'pendente';
   const { locked, waitingOn } = isLocked(def, rows);
   const isCurrent = def.n === currentStage && status !== 'concluida';
-  const meta = locked
-    ? { label: `aguardando etapa ${waitingOn}`, className: 'border-dashed border-border-strong bg-transparent text-text-faint' }
-    : STAGE_STATUS[status];
+  const payLocked = Boolean(paywalled) && def.n >= 3 && status === 'pendente';
+  const meta = payLocked
+    ? { label: 'aguardando pagamento', className: 'border-dashed border-taxi-yellow/50 bg-transparent text-taxi-yellow' }
+    : locked
+      ? { label: `aguardando etapa ${waitingOn}`, className: 'border-dashed border-border-strong bg-transparent text-text-faint' }
+      : STAGE_STATUS[status];
   const linked = docs.filter((d) => (STAGE_DOCTYPES[def.n] ?? []).includes(d.docType));
 
   return (
@@ -248,7 +253,12 @@ function StageItem({
                     </Link>
                   </div>
                 )}
-                {locked && waitingOn !== undefined && (
+                {payLocked && (
+                  <p className="text-sm text-taxi-yellow">
+                    Disponível após a confirmação do pagamento do serviço (R$ 299, único).
+                  </p>
+                )}
+                {locked && waitingOn !== undefined && !payLocked && (
                   <p className="text-sm text-text-faint">
                     Depende da etapa {waitingOn} — assim que concluir, protocolamos automaticamente.
                   </p>
@@ -267,10 +277,13 @@ export default function StageTimeline({
   rows,
   currentStage,
   docs,
+  paywalled,
 }: {
   rows: StageRow[];
   currentStage: number;
   docs: LinkedDoc[];
+  /** true = etapas 3+ travadas até pagamento confirmado */
+  paywalled?: boolean;
 }) {
   const [expanded, setExpanded] = useState<number | null>(currentStage);
   const byStage = new Map(rows.map((r) => [r.stage, r]));
@@ -304,6 +317,7 @@ export default function StageTimeline({
           docs={docs}
           expanded={expanded === n}
           onToggle={() => setExpanded((e) => (e === n ? null : n))}
+          paywalled={paywalled}
         />
       </div>
     );

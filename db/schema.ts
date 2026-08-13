@@ -170,6 +170,8 @@ export const processes = mysqlTable("processes", {
     .references(() => users.id),
   currentStage: int("currentStage").notNull().default(1),
   postPurchaseDeadline: date("postPurchaseDeadline", { mode: "string" }),
+  /** Pagamento do serviço (R$ 299) confirmado pelo admin — libera etapas 3+ */
+  paidAt: timestamp("paidAt"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt")
     .defaultNow()
