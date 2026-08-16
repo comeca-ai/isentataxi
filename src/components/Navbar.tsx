@@ -6,26 +6,19 @@ import { LOGIN_PATH } from '@/const';
 import { useAuth } from '@/hooks/useAuth';
 import { cn } from '@/lib/utils';
 
-const DEADLINE = new Date('2026-12-31T23:59:59-03:00').getTime();
-
-function daysLeft() {
-  return Math.max(0, Math.ceil((DEADLINE - Date.now()) / 86_400_000));
-}
-
 const NAV_LINKS = [
-  { to: '/simulador', label: 'Simulador' },
-  { to: '/pre-analise', label: 'Pré-análise' },
-  { to: '/guia', label: 'Guia' },
+  { to: '/#plataforma', label: 'Plataforma' },
+  { to: '/#como-funciona', label: 'Como funciona' },
+  { to: '/#planos', label: 'Planos' },
   { to: '/#faq', label: 'FAQ' },
 ];
 
 /** Strip de urgência: barra zebrada animada 8px + aviso marquee (bg amarelo, texto preto) */
 function UrgencyStrip() {
-  const days = daysLeft();
   const items = [
-    `Teto de R$ 200 mil garantido só até 31/12/2026 — faltam ${days} dias`,
-    'Carência entre benefícios sobe de 2 para 3 anos em 2027',
-    'Quem usar até 2026 fica na regra boa',
+    'Versão demo para despachantes — vertical Táxi ativo',
+    'Vertical PCD em breve na mesma plataforma',
+    'Pipeline, documentos e cobrança em um só painel',
   ];
   const line = items.map((t) => `⚠ ${t}`).join('   ·   ');
   return (
@@ -168,10 +161,10 @@ export default function Navbar() {
       <UrgencyStrip />
       <nav className="border-b border-border-subtle bg-bg-base/80 backdrop-blur-md">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 md:px-8">
-          <Link to="/" className="flex items-center gap-2.5" aria-label="IsentaTáxi — início">
+          <Link to="/" className="flex items-center gap-2.5" aria-label="Despacha.Ai — início">
             <img src="/logo-icon.svg" alt="" className="h-9 w-9" />
             <span className="font-display text-lg uppercase tracking-[-0.01em]">
-              Isenta<span className="text-taxi-yellow">Táxi</span>
+              Despacha<span className="text-taxi-yellow">.Ai</span>
             </span>
           </Link>
 
@@ -238,7 +231,7 @@ export default function Navbar() {
             <div className="zebra h-2 w-full" aria-hidden="true" />
             <div className="flex h-16 items-center justify-between px-5">
               <span className="font-display text-lg uppercase">
-                Isenta<span className="text-taxi-yellow">Táxi</span>
+                Despacha<span className="text-taxi-yellow">.Ai</span>
               </span>
               <button
                 className="flex h-11 w-11 items-center justify-center rounded-full"

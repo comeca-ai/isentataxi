@@ -2,9 +2,9 @@ import { Link } from 'react-router';
 import { MessageCircle, Clock } from 'lucide-react';
 
 const NAV = [
-  { to: '/simulador', label: 'Simulador grátis' },
-  { to: '/pre-analise', label: 'Pré-análise' },
-  { to: '/guia', label: 'Guia completo' },
+  { to: '/#plataforma', label: 'Plataforma' },
+  { to: '/#como-funciona', label: 'Como funciona' },
+  { to: '/#planos', label: 'Planos' },
   { to: '/#faq', label: 'FAQ' },
 ];
 
@@ -24,11 +24,11 @@ export default function Footer() {
             <Link to="/" className="flex items-center gap-2.5">
               <img src="/logo-icon.svg" alt="" className="h-9 w-9" loading="lazy" />
               <span className="font-display text-lg uppercase">
-                Isenta<span className="text-taxi-yellow">Táxi</span>
+                Despacha<span className="text-taxi-yellow">.Ai</span>
               </span>
             </Link>
             <p className="mt-4 text-sm leading-relaxed text-text-muted">
-              Isenção de IPI + ICMS para taxistas de São Paulo capital. De taxista para taxista.
+              A plataforma do despachante de isenções. Hoje no vertical Táxi — PCD em breve.
             </p>
           </div>
 
@@ -86,7 +86,7 @@ export default function Footer() {
               Prefeitura de SP). Nunca pedimos senha, código MFA ou sessão do Gov.br. Valores do simulador são
               estimativas com base nas alíquotas vigentes.
             </p>
-            <p className="mt-4 text-[0.8125rem] text-text-faint">Feito em São Paulo © 2026 IsentaTáxi</p>
+            <p className="mt-4 text-[0.8125rem] text-text-faint">Feito em São Paulo © 2026 Despacha.Ai</p>
           </div>
         </div>
       </div>
