@@ -1,0 +1,154 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 240 4% 4%;
+    --foreground: 0 0% 98%;
+    --card: 240 6% 8%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 6% 8%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 48 96% 53%;
+    --primary-foreground: 240 6% 4%;
+    --secondary: 240 4% 12%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 4% 12%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 48 96% 53%;
+    --accent-foreground: 240 6% 4%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 4% 16%;
+    --input: 240 4% 16%;
+    --ring: 48 96% 53%;
+    --radius: 0.625rem;
+    --sidebar-background: 240 6% 8%;
+    --sidebar-foreground: 0 0% 98%;
+    --sidebar-primary: 48 96% 53%;
+    --sidebar-primary-foreground: 240 6% 4%;
+    --sidebar-accent: 240 4% 12%;
+    --sidebar-accent-foreground: 0 0% 98%;
+    --sidebar-border: 240 4% 16%;
+    --sidebar-ring: 48 96% 53%;
+
+    /* IsentaTáxi semantic tokens (dark = padrão do site público) */
+    --c-bg-base: #0A0A0B;
+    --c-bg-surface: #131316;
+    --c-bg-elevated: #1B1B1F;
+    --c-text-primary: #FAFAFA;
+    --c-text-muted: #A1A1AA;
+    --c-text-faint: #71717A;
+    --c-border-subtle: #27272A;
+    --c-border-strong: #3F3F46;
+  }
+
+  /* Escopo claro — área logada do motorista (/app) */
+  .app-light {
+    --c-bg-base: #F4F4F2;
+    --c-bg-surface: #FFFFFF;
+    --c-bg-elevated: #F8F8F6;
+    --c-text-primary: #18181B;
+    --c-text-muted: #52525B;
+    --c-text-faint: #8E8E96;
+    --c-border-subtle: #E4E4E7;
+    --c-border-strong: #D4D4D8;
+
+    /* shadcn/ui tokens no claro (dialogs, selects, inputs dentro de /app) */
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+  }
+
+  /* Ajustes de contraste no escopo claro */
+  .app-light .text-taxi-yellow {
+    color: #A16207; /* amarelo escuro legível sobre fundo claro */
+  }
+  .app-light .bg-taxi-yellow,
+  .app-light .bg-taxi-yellow-hover {
+    color: #0A0A0B; /* texto sempre escuro sobre botões amarelos */
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-bg-base text-text-primary font-sans antialiased;
+    font-feature-settings: "cv11", "ss01";
+  }
+  ::selection {
+    background: #FACC15;
+    color: #0A0A0B;
+  }
+  /* visible focus ring on all interactive elements */
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  [role="button"]:focus-visible,
+  [tabindex]:focus-visible {
+    outline: 2px solid #FACC15;
+    outline-offset: 2px;
+  }
+}
+
+@layer utilities {
+  /* Taxi zebra signature stripe */
+  .zebra {
+    background: repeating-linear-gradient(-45deg, #FACC15 0 16px, #0A0A0B 16px 32px);
+  }
+  .zebra-fine {
+    background: repeating-linear-gradient(-45deg, #FACC15 0 8px, #0A0A0B 8px 16px);
+  }
+  .zebra-animated {
+    background: repeating-linear-gradient(-45deg, #FACC15 0 16px, #0A0A0B 16px 32px);
+    animation: zebra-move 1.2s linear infinite;
+  }
+  .hero-glow {
+    background: radial-gradient(ellipse 60% 50% at 80% 0%, rgba(250,204,21,0.14), transparent 70%);
+  }
+  .asphalt-texture {
+    background-image: url('/texture-asphalt.png');
+    background-repeat: repeat;
+  }
+  .marquee-paused:hover .marquee-track {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes pulse-cta {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+}
+
+@layer utilities {
+  .animate-pulse-cta {
+    animation: pulse-cta 1.6s ease-in-out infinite;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee,
+  .animate-marquee-slow,
+  .zebra-animated,
+  .animate-pulse-cta {
+    animation: none !important;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}

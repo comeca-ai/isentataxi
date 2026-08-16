@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="360" viewBox="0 0 480 360" fill="none">
+  <!-- open document folder, zinc line style, single yellow paper flying -->
+  <g stroke="#71717A" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <!-- back of folder -->
+    <path d="M96 260 V140 a16 16 0 0 1 16-16 h64 l20 24 h168 a16 16 0 0 1 16 16 v96" />
+    <!-- front flap (open) -->
+    <path d="M96 260 L140 168 h224 l-40 92 z" />
+    <!-- bottom edge -->
+    <path d="M96 260 h228 l40-92" stroke-dasharray="1 0"/>
+  </g>
+  <!-- inner empty line details -->
+  <g stroke="#3F3F46" stroke-width="3" stroke-linecap="round">
+    <line x1="150" y1="200" x2="260" y2="200"/>
+    <line x1="160" y1="224" x2="240" y2="224"/>
+  </g>
+  <!-- flying yellow paper -->
+  <g transform="translate(300 88) rotate(12)">
+    <rect x="0" y="0" width="56" height="72" rx="6" fill="#FACC15"/>
+    <g stroke="#0A0A0B" stroke-width="4" stroke-linecap="round">
+      <line x1="12" y1="20" x2="44" y2="20"/>
+      <line x1="12" y1="34" x2="44" y2="34"/>
+      <line x1="12" y1="48" x2="32" y2="48"/>
+    </g>
+  </g>
+  <!-- motion dashes -->
+  <g stroke="#FACC15" stroke-width="3" stroke-linecap="round" opacity="0.5">
+    <line x1="268" y1="120" x2="284" y2="112"/>
+    <line x1="258" y1="144" x2="278" y2="140"/>
+  </g>
+</svg>

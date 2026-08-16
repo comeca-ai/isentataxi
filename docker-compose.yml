@@ -1,0 +1,45 @@
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    env_file: .env
+    depends_on:
+      mysql:
+        condition: service_healthy
+    restart: unless-stopped
+
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: isentataxi
+      MYSQL_USER: isentataxi
+      # A senha vem do .env (MYSQL_PASSWORD) e deve ser a mesma de DATABASE_URL
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?defina MYSQL_PASSWORD no .env}
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p$$MYSQL_PASSWORD"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
+  # ── HTTPS com Caddy (Let's Encrypt automático) ────────────────────────────
+  # Pré-requisito: DNS de isentataxi.com.br apontando para o IP desta VPS.
+  caddy:
+    image: caddy:2-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+    depends_on:
+      - app
+    restart: unless-stopped
+
+volumes:
+  mysql-data:
+  caddy-data:

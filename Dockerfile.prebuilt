@@ -1,0 +1,13 @@
+# ── Imagem de runtime a partir de artefato pré-buildado ─────────────────────
+# Use quando o build de frontend/server é feito FORA do Docker (CI, sandbox):
+#   npm ci --include=dev && npm run build && npm prune --omit=dev \
+#     && npm install --no-save tsx drizzle-kit
+#   docker build -f Dockerfile.prebuilt -t isentataxi-app .
+# (Contorna hosts onde o npm quebra dentro de containers — "Exit handler never called!")
+FROM node:20-slim
+WORKDIR /app
+ENV NODE_ENV=production
+COPY . .
+RUN chmod +x ./docker-entrypoint.sh
+EXPOSE 3000
+CMD ["./docker-entrypoint.sh"]

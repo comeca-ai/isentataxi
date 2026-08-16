@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="64" viewBox="0 0 240 64" fill="none">
+  <rect width="64" height="64" rx="14" fill="#FACC15"/>
+  <!-- checkered black squares; negative yellow space forms a "T" -->
+  <rect x="12" y="26" width="13.33" height="13" fill="#0A0A0B"/>
+  <rect x="38.66" y="26" width="13.33" height="13" fill="#0A0A0B"/>
+  <rect x="12" y="39" width="13.33" height="13" fill="#0A0A0B"/>
+  <rect x="38.66" y="39" width="13.33" height="13" fill="#0A0A0B"/>
+  <text x="76" y="43" font-family="Arial Black, Arial, sans-serif" font-size="30" font-weight="900" letter-spacing="-0.5"><tspan fill="#FAFAFA">ISENTA</tspan><tspan fill="#FACC15">TÁXI</tspan></text>
+</svg>
