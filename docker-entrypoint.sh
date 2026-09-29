@@ -32,13 +32,13 @@ if node -e "
   })().catch(() => process.exit(0));
 "; then
   echo "[entrypoint] Banco novo detectado — sincronizando schema (drizzle-kit push)..."
-  npx drizzle-kit push --force
+  node node_modules/drizzle-kit/bin.cjs push --force
 else
   echo "[entrypoint] Banco já possui tabelas — pulando schema sync automático."
 fi
 
 echo "[entrypoint] Rodando seed (idempotente)..."
-npx tsx db/seed.ts
+node node_modules/tsx/dist/cli.mjs db/seed.ts
 
 echo "[entrypoint] Iniciando servidor..."
 exec node dist/boot.js
