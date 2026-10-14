@@ -153,7 +153,7 @@ export const ORG_BY_DOCTYPE: Record<string, string> = {
   dtp_protocolo: 'Prefeitura',
   detran_laudo: 'Detran',
   sisen_protocolo: 'SISEN',
-  sivei_autorizacao: 'SIVEI',
+  sivei_autorizacao: 'Sefaz-PB',
   nota_fiscal: 'Concessionária',
   outros: 'Outros',
 };

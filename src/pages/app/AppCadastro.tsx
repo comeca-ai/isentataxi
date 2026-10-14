@@ -166,7 +166,7 @@ const STEP_FIELDS: Record<number, FieldPath<FormValues>[]> = {
   5: [],
 };
 
-const CURSOS = ['Condutax'];
+const CURSOS = ['Curso de taxista'];
 
 /** Campos persistidos usados no % de completude e no autosave */
 const PERSISTED_KEYS = [
@@ -273,7 +273,7 @@ export default function AppCadastro() {
       cpf: '', rg: '', birthDate: '', phone: '',
       cnhNumber: '', cnhCategory: 'B', cnhEAR: true,
       alvaraNumber: '', alvaraExpiry: '', alvaraSituacao: 'ativo', anoPrimeiroAlvara: '', cursos: [],
-      cep: '', street: '', number: '', complement: '', district: '', city: 'São Paulo', state: 'SP',
+      cep: '', street: '', number: '', complement: '', district: '', city: 'João Pessoa', state: 'PB',
       comprovanteRecente: true,
       intendedVehicleId: null, intendedPrice: null, concessionaria: '', declaracao: false,
       purchaseDate: '', plateFinalDigit: '',
@@ -305,8 +305,8 @@ export default function AppCadastro() {
       number: p.number ?? '',
       complement: p.complement ?? '',
       district: p.district ?? '',
-      city: p.city ?? 'São Paulo',
-      state: p.state ?? 'SP',
+      city: p.city ?? 'João Pessoa',
+      state: p.state ?? 'PB',
       comprovanteRecente: true,
       intendedVehicleId: p.intendedVehicleId ?? null,
       intendedPrice: p.intendedPrice ?? null,
@@ -332,15 +332,15 @@ export default function AppCadastro() {
     cnhCategory: v.cnhCategory,
     cnhEAR: v.cnhEAR,
     alvaraNumber: v.alvaraNumber,
-    alvaraCity: 'São Paulo',
+    alvaraCity: 'João Pessoa',
     alvaraExpiry: brDateToISO(v.alvaraExpiry ?? ''),
     cep: v.cep,
     street: v.street,
     number: v.number,
     complement: v.complement || null,
     district: v.district,
-    city: v.city || 'São Paulo',
-    state: 'SP',
+    city: v.city || 'João Pessoa',
+    state: 'PB',
     intendedVehicleId: v.intendedVehicleId ?? null,
     intendedPrice: v.intendedPrice ?? null,
     purchaseDate: v.purchaseDate || null,
@@ -466,7 +466,7 @@ export default function AppCadastro() {
   const economy = selectedVehicle && priceForEconomy ? estimateEconomy(priceForEconomy, selectedVehicle.ipiRate) : null;
   const pendencias: string[] = [];
   if (!watched.cnhEAR) pendencias.push('EAR pendente na CNH');
-  if ((watched.cursos ?? []).length < CURSOS.length) pendencias.push('Curso Condutax pendente');
+  if ((watched.cursos ?? []).length < CURSOS.length) pendencias.push('Curso de taxista pendente');
   if (watched.alvaraSituacao === 'suspenso') pendencias.push('Alvará suspenso');
 
   // -------------------------------------------------------------------------
@@ -491,7 +491,7 @@ export default function AppCadastro() {
         />
         <h1 className="mt-6 text-2xl font-bold text-text-primary">Cadastro completo!</h1>
         <p className="mt-2 text-text-muted">
-          Suas informações já alimentam o SP156 e os requerimentos. Próximo passo: enviar os documentos.
+          Suas informações já alimentam o requerimento municipal e os requerimentos. Próximo passo: enviar os documentos.
         </p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
           <Link
@@ -676,7 +676,7 @@ export default function AppCadastro() {
                   <Callout tone="blue">
                     <Info className="mt-0.5 h-4 w-4 shrink-0" />
                     <span>
-                      Esses dados alimentam o SP156 e o requerimento da Receita. Confira com atenção — erro de CPF atrasa o protocolo.
+                      Esses dados alimentam o requerimento municipal e o requerimento da Receita. Confira com atenção — erro de CPF atrasa o protocolo.
                     </span>
                   </Callout>
                 </div>
@@ -723,7 +723,7 @@ export default function AppCadastro() {
                       <Callout tone="amber">
                         <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
                         <span>
-                          Sem EAR o processo trava no Detran. Orientação: agende a alteração no Detran-SP — nosso suporte te ajuda.
+                          Sem EAR o processo trava no Detran. Orientação: agende a alteração no Detran-PB — nosso suporte te ajuda.
                           <span className="ml-2 inline-block rounded-full border border-warn-amber/50 px-2 py-0.5 font-mono text-[0.7rem]">
                             pendência registrada
                           </span>
@@ -738,10 +738,10 @@ export default function AppCadastro() {
               {step === 3 && (
                 <div className="grid gap-8 xl:grid-cols-[1fr_220px]">
                   <div className="space-y-5">
-                    <h2 className="text-xl font-bold text-text-primary">Alvará de taxista (SP)</h2>
+                    <h2 className="text-xl font-bold text-text-primary">Alvará de taxista (PB)</h2>
                     <div className="grid gap-5 md:grid-cols-2">
                       <div>
-                        <label htmlFor="alvaraNumber" className={labelCls}>Número do alvará (SVAT)*</label>
+                        <label htmlFor="alvaraNumber" className={labelCls}>Número do alvará*</label>
                         <input
                           id="alvaraNumber"
                           data-error={!!errors.alvaraNumber}
@@ -791,7 +791,7 @@ export default function AppCadastro() {
                         <Callout tone="red">
                           <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
                           <span>
-                            Alvará suspenso trava o protocolo na Prefeitura. Regularize junto ao DTP — marcamos uma pendência no seu processo e o suporte te orienta.
+                            Alvará suspenso trava o protocolo na Prefeitura. Regularize junto à Prefeitura — marcamos uma pendência no seu processo e o suporte te orienta.
                           </span>
                         </Callout>
                       )}
@@ -926,8 +926,8 @@ export default function AppCadastro() {
                       </div>
                       <div>
                         <label htmlFor="state" className={labelCls}>UF*</label>
-                        <input id="state" value="SP" readOnly aria-readonly className={cn(inputCls, 'opacity-70')} />
-                        <p className="mt-1 text-[0.7rem] text-text-faint">Atendemos só SP capital</p>
+                        <input id="state" value="PB" readOnly aria-readonly className={cn(inputCls, 'opacity-70')} />
+                        <p className="mt-1 text-[0.7rem] text-text-faint">Atendemos a Paraíba</p>
                       </div>
                     </div>
                   </div>
@@ -1063,7 +1063,7 @@ export default function AppCadastro() {
                         )}
                       </div>
                       <p className="text-[0.8125rem] text-text-faint md:col-span-2">
-                        Preencha depois da compra para ativar os lembretes (prazo SIVEI de 30 dias da NF-e e
+                        Preencha depois da compra para ativar os lembretes (prazo Sefaz-PB de 30 dias da NF-e e
                         licenciamento anual) no seu painel.
                       </p>
                     </div>
@@ -1103,7 +1103,7 @@ export default function AppCadastro() {
                           step: 3, title: 'Alvará',
                           rows: [
                             ['Número', watched.alvaraNumber], ['Validade', watched.alvaraExpiry || '—'],
-                            ['Condutax', (watched.cursos ?? []).length ? 'Concluído' : 'Pendente'],
+                            ['Curso de taxista', (watched.cursos ?? []).length ? 'Concluído' : 'Pendente'],
                           ],
                         },
                         {

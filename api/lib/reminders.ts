@@ -58,7 +58,7 @@ export async function runReminders(): Promise<void> {
   for (const r of rows) {
     if (!r.email) continue;
 
-    // ── IPVA: prazo de 30 dias após a compra (prova SIVEI) ────────────────
+    // ── IPVA: prazo de 30 dias após a compra (comprovação na Sefaz-PB) ────────────────
     if (r.purchaseDate) {
       const purchase = new Date(`${r.purchaseDate}T12:00:00`);
       const days = Math.floor((today.getTime() - purchase.getTime()) / 86_400_000);

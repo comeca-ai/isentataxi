@@ -8,7 +8,7 @@ import { fmtBRL, fuelLabel, pct } from './catalog';
 
 export interface PanelData extends LocalCalc {
   fuel: 'flex' | 'hibrido' | 'eletrico';
-  /** IPVA anual estimado (4% do valor venal) — vem do calculate; fallback local */
+  /** IPVA anual estimado (2,5% do valor venal) — vem do calculate; fallback local */
   ipvaAnnual: number;
   /** Nota do 1º ano de atividade (taxista novo paga o 1º IPVA) */
   ipvaNote: string;
@@ -100,7 +100,7 @@ export default function ResultPanel({
       `Simulação IsentaTáxi — ${model}`,
       `Preço ref.: R$ ${fmtBRL(data.price)}`,
       `IPI (~${pct(data.ipiRate)}): R$ ${fmtBRL(data.ipiValue)}`,
-      `ICMS SP (12%): R$ ${fmtBRL(data.icmsValue)}`,
+      `ICMS PB (12%): R$ ${fmtBRL(data.icmsValue)}`,
       `Economia estimada: R$ ${fmtBRL(data.totalSavings)}`,
       `Preço com isenção ≈ R$ ${fmtBRL(data.finalPrice)}`,
       '*Estimativa com base nas alíquotas vigentes — sem promessa de aprovação.',
@@ -195,12 +195,12 @@ export default function ResultPanel({
                   <dd className="text-taxi-yellow">= R$ <span ref={ipiRef}>{fmtBRL(data.ipiValue)}</span></dd>
                 </div>
                 <div className="flex justify-between gap-3 border-b border-dashed border-border-subtle pb-3">
-                  <dt className="text-text-muted">ICMS SP (12%)</dt>
+                  <dt className="text-text-muted">ICMS PB (12%)</dt>
                   <dd className="text-money-green">= R$ <span ref={icmsRef}>{fmtBRL(data.icmsValue)}</span></dd>
                 </div>
                 <div className="border-b border-dashed border-border-subtle pb-3">
                   <div className="flex justify-between gap-3">
-                    <dt className="text-text-muted">IPVA (4%/ano)</dt>
+                    <dt className="text-text-muted">IPVA (2,5%/ano)</dt>
                     <dd className="flex items-center gap-2 text-money-green">
                       R$ {fmtBRL(data.ipvaAnnual)}/ano
                       <span className="rounded-full border border-money-green/40 bg-money-green/10 px-2 py-0.5 font-mono text-[0.7rem] font-bold">
@@ -218,7 +218,7 @@ export default function ResultPanel({
 
               <p className="mt-5 text-[0.75rem] leading-relaxed text-text-faint">
                 Estimativa didática com base nas alíquotas típicas de 2026. O valor final depende do modelo
-                exato, da tabela da montadora e do deferimento pela Receita Federal e Sefaz-SP.
+                exato, da tabela da montadora e do deferimento pela Receita Federal e Sefaz-PB.
               </p>
 
               <p className="mt-4 flex items-start gap-2 rounded-xl border border-money-green/30 bg-money-green/10 p-3 text-[0.8125rem] leading-snug text-text-primary">

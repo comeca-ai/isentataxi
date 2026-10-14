@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import Eyebrow from '@/components/Eyebrow';
 
-const HEADLINE = 'TAXI 0 KM SEM IPI E SEM ICMS: O GUIA DEFINITIVO DE SP.'.split(' ');
+const HEADLINE = 'TAXI 0 KM SEM IPI E SEM ICMS: O GUIA DEFINITIVO DA PARAÍBA.'.split(' ');
 
 /** Bloco 1 — Hero do guia (H1 split por palavra no load) */
 export default function GuiaHero() {
@@ -32,7 +32,7 @@ export default function GuiaHero() {
         transition={{ delay: 0.55, duration: 0.7 }}
         className="mt-6 max-w-2xl text-[1.0625rem] leading-relaxed text-text-muted"
       >
-        Tudo o que o taxista paulistano precisa saber sobre as isenções: leis, órgãos, prazos, pegadinhas e a
+        Tudo o que o taxista paraibano precisa saber sobre as isenções: leis, órgãos, prazos, pegadinhas e a
         decisão do STJ que mudou o jogo em 2025.
       </motion.p>
 

@@ -34,12 +34,12 @@ const STAGE_DOCTYPES: Record<number, string[]> = {
 const STAGE_DESCRIPTIONS: Record<number, string> = {
   1: 'Seus dados e a pré-análise de elegibilidade.',
   2: 'Envio e conferência dos documentos pela nossa equipe.',
-  3: 'Protocolo do requerimento na Prefeitura (DTP / SP156).',
-  4: 'Vistoria e laudo do veículo no Detran-SP.',
+  3: 'Protocolo do requerimento na Prefeitura (Prefeitura).',
+  4: 'Vistoria e laudo do veículo no Detran-PB.',
   5: 'Pedido de isenção de IPI na Receita Federal (SISEN).',
-  6: 'Autorização de isenção de ICMS na Sefaz-SP (SIVEI).',
+  6: 'Autorização de isenção de ICMS na Sefaz-PB.',
   7: 'Compra do veículo e comprovação pós-compra em até 60 dias.',
-  8: 'Isenção de IPVA na Sefaz-SP — total, todo ano, mas com gatilhos.',
+  8: 'Isenção de IPVA na Sefaz-PB — total, todo ano, mas com gatilhos.',
 };
 
 function isLocked(def: Stage, rows: Map<number, StageRow>): { locked: boolean; waitingOn?: number } {
@@ -230,7 +230,7 @@ function StageItem({
                   <div className="space-y-3">
                     <div className="rounded-xl border border-warn-amber/40 bg-warn-amber/10 p-3 text-sm text-text-primary">
                       <strong className="text-warn-amber">Prazo duro:</strong> carro 0 km — se a isenção não sair
-                      automática, o pedido no SIVEI deve ser feito em até{' '}
+                      automática, o pedido na Sefaz-PB deve ser feito em até{' '}
                       <strong>{IPVA_ZERO_KM_DEADLINE_DAYS} dias da NF-e</strong>.
                     </div>
                     <div className="rounded-xl border border-alert-red/40 bg-alert-red/10 p-3 text-sm">

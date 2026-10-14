@@ -19,7 +19,7 @@ import {
   waLink,
 } from '@/components/admin/shared';
 
-const LOST_REASONS = ['Sem resposta', 'Desistiu', 'Fora de SP', 'Outro'];
+const LOST_REASONS = ['Sem resposta', 'Desistiu', 'Fora da PB', 'Outro'];
 
 function whatsappTemplate(lead: Lead): string {
   const sim = extractSimulation(lead.simulationSnapshot);

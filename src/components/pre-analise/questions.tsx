@@ -30,8 +30,8 @@ export function buildQuestions(hasContact: boolean): Question[] {
     {
       id: 'alvara',
       block: 'SOBRE VOCÊ',
-      text: <>Você tem <strong className="text-taxi-yellow">alvará de taxista da Prefeitura de São Paulo</strong>?</>,
-      hint: 'O alvará municipal é o documento-chave. O de SP capital é o que vale aqui.',
+      text: <>Você tem <strong className="text-taxi-yellow">alvará de taxista da Prefeitura do seu município</strong>?</>,
+      hint: 'O alvará municipal é o documento-chave. O da Paraíba é o que vale aqui.',
       type: 'choice',
       choices: [
         { value: 'sim', label: 'Sim' },
@@ -65,7 +65,7 @@ export function buildQuestions(hasContact: boolean): Question[] {
     {
       id: 'cursos',
       block: 'SOBRE VOCÊ',
-      text: <>Você já concluiu os <strong className="text-taxi-yellow">curso obrigatório</strong> (Condutax)?</>,
+      text: <>Você já concluiu os <strong className="text-taxi-yellow">curso obrigatório</strong> (exigido pela Prefeitura)?</>,
       type: 'choice',
       choices: [
         { value: 'todos', label: 'Sim, todos' },
@@ -242,14 +242,14 @@ export function evaluate(answers: Answers): Evaluation {
   const bloqueios: string[] = [];
 
   // Bloco 1 — você
-  if (answers.alvara === 'nao') bloqueios.push('Sem alvará de taxista da Prefeitura de SP — ele é o documento-chave do benefício.');
+  if (answers.alvara === 'nao') bloqueios.push('Sem alvará de taxista da Prefeitura — ele é o documento-chave do benefício.');
   if (answers.alvara === 'tirando') pendencias.push('Alvará em andamento — o benefício só sai com o alvará emitido.');
   if (answers.alvara_nome === 'outro') bloqueios.push('Alvará em nome de outra pessoa — precisa estar no seu nome.');
-  if (answers.alvara_nome === 'vencido') pendencias.push('Alvará vencido ou suspenso — regularize na Prefeitura de SP.');
-  if (answers.ear === 'nao') pendencias.push('CNH sem EAR — resolver no Detran-SP.');
+  if (answers.alvara_nome === 'vencido') pendencias.push('Alvará vencido ou suspenso — regularize na Prefeitura.');
+  if (answers.ear === 'nao') pendencias.push('CNH sem EAR — resolver no Detran-PB.');
   if (answers.ear === 'nao_sei') pendencias.push('Confirmar EAR no verso da CNH (campo "Observações").');
-  if (answers.cursos === 'alguns') pendencias.push('Curso obrigatório pendente — conclua o Condutax.');
-  if (answers.cursos === 'nenhum') pendencias.push('Curso obrigatório pendente — Condutax.');
+  if (answers.cursos === 'alguns') pendencias.push('Curso obrigatório pendente — conclua o curso exigido pela Prefeitura.');
+  if (answers.cursos === 'nenhum') pendencias.push('Curso obrigatório pendente — curso de taxista exigido pela Prefeitura.');
   if (answers.usou_antes === 'menos2') {
     const ano = Number(answers.ano_beneficio);
     if (ano && !Number.isNaN(ano)) {

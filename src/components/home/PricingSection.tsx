@@ -6,18 +6,18 @@ import Reveal, { RevealItem } from '@/components/Reveal';
 
 const FREE_ITEMS = ['Simulador completo', 'Pré-análise de elegibilidade', 'Guia e tira-dúvidas no WhatsApp'];
 const PAID_ITEMS = [
-  'Protocolos DTP + SP156',
-  'Detran-SP',
+  'Protocolo na Prefeitura',
+  'Detran-PB',
   'SISEN (IPI)',
-  'SIVEI (ICMS)',
+  'Sefaz-PB (ICMS)',
   'Revisão de documentos',
   'Acompanhamento até a nota fiscal',
 ];
 const INCLUDED_STAGES = [
-  'Etapa 3 — DTP / SP156 (Prefeitura de SP)',
-  'Etapa 4 — Detran-SP (consulta de restrições)',
+  'Etapa 3 — Prefeitura (órgão municipal de mobilidade)',
+  'Etapa 4 — Detran-PB (consulta de restrições)',
   'Etapa 5 — SISEN / Receita Federal (IPI)',
-  'Etapa 6 — SIVEI / Sefaz-SP (ICMS)',
+  'Etapa 6 — Sefaz-PB (ICMS)',
 ];
 
 function PriceCounter() {

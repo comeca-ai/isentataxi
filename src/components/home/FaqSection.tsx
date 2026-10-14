@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 const FAQS = [
   {
     q: 'Isso é legal mesmo?',
-    a: 'Sim. IPI: Lei 8.989/1995 + LC 160/2017; ICMS: isenção estadual de SP via SIVEI. O protocolo nos órgãos é gratuito — cobramos a operação, não o benefício.',
+    a: 'Sim. IPI: Lei 8.989/1995 + LC 160/2017; ICMS: isenção estadual da PB via Sefaz-PB (Convênio ICMS 38/01). O protocolo nos órgãos é gratuito — cobramos a operação, não o benefício.',
   },
   {
     q: 'Preciso dar minha senha do Gov.br?',
@@ -35,7 +35,7 @@ const FAQS = [
   },
   {
     q: 'Preciso enviar guias? Elas precisam estar pagas?',
-    a: 'Sim. Guias e taxas do processo (ex.: laudo/vistoria do Detran e o licenciamento anual, R$ 174,08 — este não é isento) precisam estar quitadas. Você fotografa ou sobe o PDF do comprovante pelo painel e nossa equipe confere antes de protocolar — guia em aberto trava o processo no órgão.',
+    a: 'Sim. Guias e taxas do processo (ex.: laudo/vistoria do Detran e o licenciamento anual do Detran-PB) precisam estar quitadas. Você fotografa ou sobe o PDF do comprovante pelo painel e nossa equipe confere antes de protocolar — guia em aberto trava o processo no órgão.',
   },
   {
     q: 'E se o órgão negar?',

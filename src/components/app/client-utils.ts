@@ -87,17 +87,17 @@ export type DocGroup = {
 export const DOC_CHECKLIST: DocGroup[] = [
   {
     key: 'prefeitura',
-    org: 'Prefeitura de SP — DTP / SVAT',
+    org: 'Prefeitura — órgão municipal de mobilidade',
     icon: 'building',
     items: [
-      { key: 'alvara', docType: 'alvara', name: 'Alvará de taxista (SVAT)', required: true, note: 'PDF ou foto nítida, dentro da validade' },
-      { key: 'certidao_cursos', docType: 'certidao_cursos', name: 'Certificado do curso Condutax', required: true, note: 'Curso obrigatório para taxistas de SP' },
-      { key: 'dtp_protocolo', docType: 'dtp_protocolo', name: 'Formulário SP156 preenchido', required: true, note: 'Geramos pré-preenchido com seu cadastro — baixe, assine, reenvie' },
+      { key: 'alvara', docType: 'alvara', name: 'Alvará de taxista', required: true, note: 'PDF ou foto nítida, dentro da validade' },
+      { key: 'certidao_cursos', docType: 'certidao_cursos', name: 'Certificado do curso obrigatório de taxista', required: true, note: 'Curso exigido pelo órgão municipal' },
+      { key: 'dtp_protocolo', docType: 'dtp_protocolo', name: 'Requerimento municipal preenchido', required: true, note: 'Geramos pré-preenchido com seu cadastro — baixe, assine, reenvie' },
     ],
   },
   {
     key: 'detran',
-    org: 'Detran-SP',
+    org: 'Detran-PB',
     icon: 'car',
     items: [
       { key: 'cnh', docType: 'cnh', name: 'CNH com EAR (frente e verso)', required: true, note: 'EAR visível no verso' },
@@ -116,10 +116,10 @@ export const DOC_CHECKLIST: DocGroup[] = [
   },
   {
     key: 'sefaz',
-    org: 'Sefaz-SP — SIVEI / ICMS',
+    org: 'Sefaz-PB — ICMS',
     icon: 'receipt',
     items: [
-      { key: 'sivei_autorizacao', docType: 'sivei_autorizacao', name: 'Requerimento SIVEI', required: true, note: 'Gerado automaticamente após SISEN deferido' },
+      { key: 'sivei_autorizacao', docType: 'sivei_autorizacao', name: 'Requerimento de isenção de ICMS (Sefaz-PB)', required: true, note: 'Gerado automaticamente após SISEN deferido' },
       { key: 'declaracao_vinculo', docType: 'detran_laudo', name: 'Declaração de vinculação ao táxi', required: true, note: 'Modelo fornecido' },
     ],
   },

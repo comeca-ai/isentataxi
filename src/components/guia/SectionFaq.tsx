@@ -9,7 +9,7 @@ import { ArticleH2, ArticleSection } from './shared';
 const FAQS = [
   {
     q: 'O protocolo é pago?',
-    a: 'Não — o protocolo é gratuito nos órgãos (SISEN e SIVEI). O que cobramos é a operação: organizar documentos, acompanhar prazos e evitar erro que custa meses.',
+    a: 'Não — o protocolo é gratuito nos órgãos (Receita Federal e Sefaz-PB). O que cobramos é a operação: organizar documentos, acompanhar prazos e evitar erro que custa meses.',
   },
   {
     q: 'Posso fazer sozinho?',
@@ -21,7 +21,7 @@ const FAQS = [
   },
   {
     q: 'E as guias/taxas — precisam estar pagas?',
-    a: 'Sim. O protocolo da isenção é gratuito, mas taxas como laudo/vistoria do Detran e o licenciamento anual (R$ 174,08) precisam estar quitadas. O comprovante da guia paga é enviado pelo painel e conferido pela nossa equipe antes do protocolo — guia em aberto trava o processo.',
+    a: 'Sim. O protocolo da isenção é gratuito, mas taxas como laudo/vistoria do Detran e o licenciamento anual do Detran-PB precisam estar quitadas. O comprovante da guia paga é enviado pelo painel e conferido pela nossa equipe antes do protocolo — guia em aberto trava o processo.',
   },
   {
     q: 'IPVA entra?',
@@ -34,7 +34,7 @@ const FONTES = [
   'LC 160/2017',
   'Lei 14.183/2021',
   'STJ REsp 2.018.676 (2025)',
-  'Portais SISEN/Receita Federal e SIVEI/Sefaz-SP',
+  'Portais SISEN/Receita Federal e Sefaz-PB',
 ];
 
 function FaqItem({ q, a, open, onToggle }: { q: string; a: string; open: boolean; onToggle: () => void }) {

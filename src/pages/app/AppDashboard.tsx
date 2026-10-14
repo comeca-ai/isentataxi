@@ -49,11 +49,11 @@ const STAGE_BLURB: Record<number, string> = {
   1: 'Conferindo seus dados de cadastro e pré-análise.',
   2: 'Envie os documentos — nossa equipe revisa em até 1 dia útil.',
   3: 'Seus documentos foram protocolados na Prefeitura. Prazo típico: 2–6 semanas.',
-  4: 'Vistoria e laudo do veículo no Detran-SP. Prazo típico: 2–4 semanas.',
+  4: 'Vistoria e laudo do veículo no Detran-PB. Prazo típico: 2–4 semanas.',
   5: 'Pedido de isenção de IPI na Receita Federal. Prazo típico: 4–6 semanas.',
-  6: 'Autorização de ICMS na Sefaz-SP. Prazo típico: 2–4 semanas.',
+  6: 'Autorização de ICMS na Sefaz-PB. Prazo típico: 2–4 semanas.',
   7: 'Hora de comprar seu táxi 0 km! Comprove em até 60 dias.',
-  8: 'Pedido de isenção de IPVA no SIVEI em até 30 dias da NF-e.',
+  8: 'Pedido de isenção de IPVA na Sefaz-PB em até 30 dias da NF-e.',
 };
 
 type FeedEntry = { id: string; date: Date; text: string; tone: 'blue' | 'green' | 'red' | 'zinc' | 'amber' };
@@ -492,7 +492,7 @@ export default function AppDashboard() {
               <li className="flex items-start gap-3">
                 <CalendarClock className="mt-0.5 h-5 w-5 shrink-0 text-taxi-yellow" />
                 <span className="text-sm text-text-primary">
-                  Pedido SIVEI IPVA:{' '}
+                  Pedido Sefaz-PB IPVA:{' '}
                   {derived.ipvaDaysLeft > 0 ? (
                     <span
                       className={cn(
@@ -515,8 +515,7 @@ export default function AppDashboard() {
               <li className="flex items-start gap-3">
                 <CalendarClock className="mt-0.5 h-5 w-5 shrink-0 text-info-blue" />
                 <span className="text-sm text-text-primary">
-                  Licenciamento 2026: ~{derived.licMonth} —{' '}
-                  R$ {LICENCIAMENTO_2026.valor.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  Licenciamento/IPVA 2026: ~{derived.licMonth} — taxa do Detran-PB
                   <span className="ml-2 rounded-full border border-border-strong bg-bg-elevated px-2 py-0.5 font-mono text-[0.7rem] text-text-muted">
                     calendário estimado
                   </span>

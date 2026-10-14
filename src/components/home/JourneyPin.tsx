@@ -11,10 +11,10 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
 const STAGES = [
   { n: 1, icon: UserPlus, title: 'Cadastro + pré-análise', desc: 'Quiz grátis de 2 minutos diz se você pode.', chip: 'GRÁTIS', chipCls: 'zebra-fine text-taxi-yellow' },
   { n: 2, icon: CreditCard, title: 'Pagamento + documentos', desc: 'R$ 299 único, só quando decidir executar. Upload guiado.', chip: 'R$ 299', chipCls: 'bg-taxi-yellow/10 text-taxi-yellow' },
-  { n: 3, icon: Building2, title: 'DTP / SP156', desc: 'Prefeitura de SP. Roda em paralelo com o Detran.', chip: '∥ PARALELO', chipCls: 'bg-info-blue/10 text-info-blue' },
-  { n: 4, icon: CarFront, title: 'Detran-SP', desc: 'Consulta de restrições. Paralelo ao DTP.', chip: '∥ PARALELO', chipCls: 'bg-info-blue/10 text-info-blue' },
-  { n: 5, icon: Landmark, title: 'SISEN — Receita Federal (IPI)', desc: 'O desconto federal. Só começa depois do DTP.', chip: 'DEPENDE DA 3', chipCls: 'bg-warn-amber/10 text-warn-amber' },
-  { n: 6, icon: Receipt, title: 'SIVEI — Sefaz-SP (ICMS)', desc: '12% do Estado. Só depois do IPI deferido.', chip: 'DEPENDE DA 5', chipCls: 'bg-warn-amber/10 text-warn-amber' },
+  { n: 3, icon: Building2, title: 'Prefeitura', desc: 'Prefeitura. Roda em paralelo com o Detran.', chip: '∥ PARALELO', chipCls: 'bg-info-blue/10 text-info-blue' },
+  { n: 4, icon: CarFront, title: 'Detran-PB', desc: 'Consulta de restrições. Paralelo à Prefeitura.', chip: '∥ PARALELO', chipCls: 'bg-info-blue/10 text-info-blue' },
+  { n: 5, icon: Landmark, title: 'SISEN — Receita Federal (IPI)', desc: 'O desconto federal. Só começa depois da Prefeitura.', chip: 'DEPENDE DA 3', chipCls: 'bg-warn-amber/10 text-warn-amber' },
+  { n: 6, icon: Receipt, title: 'Sefaz-PB (ICMS)', desc: '12% do Estado. Só depois do IPI deferido.', chip: 'DEPENDE DA 5', chipCls: 'bg-warn-amber/10 text-warn-amber' },
   { n: 7, icon: KeyRound, title: 'Concessionária + pós-compra', desc: 'Retire o carro e comprove em 60 dias.', chip: '60 DIAS', chipCls: 'bg-money-green/10 text-money-green' },
 ];
 

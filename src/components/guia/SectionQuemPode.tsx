@@ -20,13 +20,13 @@ export default function SectionQuemPode() {
           <div className="rounded-2xl border border-border-subtle bg-bg-surface p-6 md:p-8">
             <ul className="space-y-4">
               <CheckItem>
-                Alvará de taxista da <strong className="text-text-primary">Prefeitura de São Paulo</strong>{' '}
-                (SVAT/DTP) válido e em seu nome.
+                Alvará de taxista da <strong className="text-text-primary">Prefeitura do seu município</strong>{' '}
+                (órgão municipal de mobilidade) válido e em seu nome.
               </CheckItem>
               <CheckItem>
                 CNH com <strong className="text-text-primary">EAR</strong> (exerce atividade remunerada).
               </CheckItem>
-              <CheckItem>Curso obrigatório em dia (<strong className="text-text-primary">Condutax</strong>).</CheckItem>
+              <CheckItem>Curso obrigatório em dia (<strong className="text-text-primary">exigido pela Prefeitura</strong>).</CheckItem>
               <CheckItem>
                 Carência respeitada: <strong className="text-text-primary">2 anos</strong> desde o último
                 benefício (sobe para 3 em 2027 — use até 2026 e fique na regra dos 2).

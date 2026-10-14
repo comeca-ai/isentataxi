@@ -32,15 +32,15 @@ export default function SectionIsencoes() {
           </RevealItem>
           <RevealItem>
             <p>
-              <strong className="text-text-primary">ICMS (SP)</strong> — imposto estadual, alíquota interna de{' '}
+              <strong className="text-text-primary">ICMS (PB)</strong> — imposto estadual, alíquota interna de{' '}
               <span className="font-mono font-bold text-taxi-yellow">{icmsPct}%</span>. A isenção sai pelo{' '}
-              <strong className="text-text-primary">SIVEI (Sefaz-SP)</strong> — e depende do IPI deferido
+              <strong className="text-text-primary">Sefaz-PB</strong> — e depende do IPI deferido
               primeiro.
             </p>
           </RevealItem>
           <RevealItem>
             <p>
-              <strong className="text-text-primary">IPVA (SP)</strong> — isenção estadual{' '}
+              <strong className="text-text-primary">IPVA (PB)</strong> — isenção estadual{' '}
               <strong className="text-text-primary">total (100%, sem teto)</strong> para táxi, que vale todo ano
               enquanto as condições se mantiverem. Tem regras e gatilhos próprios — detalhamos na{' '}
               <a href="#ipva" className="font-medium text-taxi-yellow transition-colors hover:text-taxi-yellow-hover">

@@ -78,7 +78,7 @@ export default function FinalCtaBanner() {
 
               <p className="mx-auto mt-8 max-w-2xl border-t border-border-subtle pt-6 text-[0.8125rem] leading-relaxed text-text-faint">
                 Sem promessa de aprovação — quem defere o benefício é o órgão público (Receita Federal /
-                Sefaz-SP / Prefeitura de SP). Nunca pedimos senha, código MFA ou sessão do Gov.br. Valores do
+                Sefaz-PB / Prefeitura). Nunca pedimos senha, código MFA ou sessão do Gov.br. Valores do
                 simulador são estimativas com base nas alíquotas vigentes.
               </p>
             </div>

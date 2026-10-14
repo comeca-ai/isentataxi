@@ -68,8 +68,8 @@ export default function MiniSimulator() {
           </RevealItem>
           <RevealItem>
             <p className="mt-5 max-w-md leading-relaxed text-text-muted">
-              Arraste e veja na hora. IPI (7% a 13%) + ICMS SP (12%) somam 19% a 25% do preço do carro. É
-              desconto de verdade, com lei: IPI federal + isenção estadual de SP.
+              Arraste e veja na hora. IPI (7% a 13%) + ICMS PB (12%) somam 19% a 25% do preço do carro. É
+              desconto de verdade, com lei: IPI federal + isenção estadual da PB.
             </p>
           </RevealItem>
           <RevealItem>
@@ -153,7 +153,7 @@ export default function MiniSimulator() {
                 </div>
                 <div>
                   <div className="flex justify-between text-xs">
-                    <span className="font-medium text-text-muted">ICMS SP — 12%</span>
+                    <span className="font-medium text-text-muted">ICMS PB — 12%</span>
                     <span className="font-mono text-money-green">R$ <span ref={icmsRef}>0</span></span>
                   </div>
                   <div className="mt-1.5 h-2 overflow-hidden rounded-full bg-bg-base">

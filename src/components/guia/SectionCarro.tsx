@@ -88,7 +88,7 @@ export default function SectionCarro() {
                       IPI típico
                     </th>
                     <th scope="col" className="px-6 py-4 text-[0.8125rem] font-semibold uppercase tracking-[0.08em] text-text-faint">
-                      ICMS SP
+                      ICMS PB
                     </th>
                     <th scope="col" className="px-6 py-4 text-[0.8125rem] font-semibold uppercase tracking-[0.08em] text-text-faint">
                       Desconto total típico

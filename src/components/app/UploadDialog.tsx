@@ -18,7 +18,7 @@ const ACCEPT = {
 
 const DOC_TIPS: Record<string, string[]> = {
   cnh: ['Foto nítida, sem reflexo', 'Frente e verso no mesmo arquivo (ou PDF de 2 páginas)', 'Dentro da validade, com EAR visível no verso'],
-  alvara: ['PDF ou foto nítida do alvará SVAT', 'Dentro da validade', 'Número do alvará legível'],
+  alvara: ['PDF ou foto nítida do alvará municipal', 'Dentro da validade', 'Número do alvará legível'],
   comprovante_residencia: ['Conta de luz, água ou telefone', 'Emitido há até 90 dias', 'Endereço igual ao do cadastro'],
   nota_fiscal: ['Nota fiscal da compra do veículo', 'Emitida pela concessionária', 'Prazo de 60 dias após a compra'],
 };

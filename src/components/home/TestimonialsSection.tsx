@@ -5,9 +5,9 @@ import Reveal, { RevealItem } from '@/components/Reveal';
 const TESTIMONIALS = [
   {
     quote:
-      'Achei que era golpe. Era lei. Economizei R$ 26 mil no Virtus e o pessoal cuidou de tudo no SISEN e no SIVEI.',
+      'Achei que era golpe. Era lei. Economizei R$ 26 mil no Virtus e o pessoal cuidou de tudo no SISEN e na Sefaz-PB.',
     name: 'Seu Ronaldo, 54',
-    meta: 'taxista SP · táxi há 22 anos · comprou Virtus',
+    meta: 'taxista · táxi há 22 anos · comprou Virtus',
     saved: 'economizou R$ 26.500',
     avatar: '/avatar-1.jpg',
   },
@@ -15,7 +15,7 @@ const TESTIMONIALS = [
     quote:
       'Tirei o alvará em março e comprei em junho. Me disseram que eu precisava esperar — a decisão do STJ mudou tudo.',
     name: 'Dona Cleusa, 41',
-    meta: 'taxista SP · comprou HB20S',
+    meta: 'taxista · comprou HB20S',
     saved: 'economizou R$ 24.000',
     avatar: '/avatar-2.jpg',
   },
@@ -23,7 +23,7 @@ const TESTIMONIALS = [
     quote:
       'Fiz tudo pelo celular, mandei os documentos e fui acompanhando etapa por etapa. Em 5 meses estava com o Corolla na garagem.',
     name: 'Seu Antônio, 61',
-    meta: 'taxista SP · comprou Corolla',
+    meta: 'taxista · comprou Corolla',
     saved: 'economizou R$ 40.000',
     avatar: '/avatar-3.jpg',
   },

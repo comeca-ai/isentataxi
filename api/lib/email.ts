@@ -48,7 +48,7 @@ const shell = (title: string, body: string) => `
     <h1 style="color:#FAFAFA;font-size:22px;margin:24px 0 12px">${title}</h1>
     <div style="color:#A1A1AA;font-size:15px;line-height:1.6">${body}</div>
     <a href="https://isentataxi.com.br/app" style="display:inline-block;margin-top:24px;background:#FACC15;color:#0A0A0B;font-weight:700;padding:12px 24px;border-radius:999px;text-decoration:none">Acessar meu painel</a>
-    <p style="color:#71717A;font-size:12px;margin-top:32px">IsentaTáxi — isenção de IPI/ICMS/IPVA para taxistas de São Paulo.<br>Dúvidas? WhatsApp: https://wa.me/5511942299144</p>
+    <p style="color:#71717A;font-size:12px;margin-top:32px">IsentaTáxi — isenção de IPI/ICMS/IPVA para taxistas da Paraíba.<br>Dúvidas? WhatsApp: https://wa.me/5511942299144</p>
   </div>
 </div>`;
 
@@ -94,13 +94,13 @@ export async function sendPaymentConfirmedEmail(to: string, name: string): Promi
     subject: "Pagamento confirmado — estamos executando seu processo ✅",
     html: shell(
       `${first}, pagamento confirmado!`,
-      `<p>Recebemos a confirmação do seu pagamento. A partir de agora nossa equipe executa os protocolos do seu processo (DTP, Detran, SISEN e SIVEI) e você acompanha cada etapa pelo painel.</p>
+      `<p>Recebemos a confirmação do seu pagamento. A partir de agora nossa equipe executa os protocolos do seu processo (Prefeitura, Detran-PB, SISEN e Sefaz-PB) e você acompanha cada etapa pelo painel.</p>
        <p>Qualquer pendência, avisamos por aqui e pelo seu painel.</p>`,
     ),
   });
 }
 
-/** Lembrete: prazo de 30 dias do IPVA (prova SIVEI pós-compra) */
+/** Lembrete: prazo de 30 dias do IPVA (comprovação na Sefaz-PB pós-compra) */
 export async function sendIpvaDeadlineEmail(
   to: string,
   name: string,
@@ -115,14 +115,14 @@ export async function sendIpvaDeadlineEmail(
       : `Lembrete: ${daysLeft} dias para o prazo do IPVA`,
     html: shell(
       urgente ? `${first}, é agora ou multa!` : `${first}, fique de olho no prazo.`,
-      `<p>Após a compra do veículo, você tem <strong style="color:#FAFAFA">30 dias</strong> para comprovar a isenção de IPVA junto à SEFAZ-SP (via SIVEI).</p>
+      `<p>Após a compra do veículo, você tem <strong style="color:#FAFAFA">30 dias</strong> para comprovar a isenção de IPVA junto à SEFAZ-PB.</p>
        <p><strong style="color:#FACC15">Restam ${daysLeft} dia(s).</strong> Perdeu o prazo = IPVA cobrado + possível multa.</p>
        <p>Envie a NF-e pelo painel (Meus documentos) que nós protocolamos pra você.</p>`,
     ),
   });
 }
 
-/** Lembrete: licenciamento anual (não é isento — R$ 174,08 em 2026) */
+/** Lembrete: licenciamento anual (não é isento) */
 export async function sendLicenciamentoEmail(
   to: string,
   name: string,
@@ -135,7 +135,7 @@ export async function sendLicenciamentoEmail(
     subject: `Licenciamento ${monthLabel}: seu mês chegou (placa final ${plateFinal})`,
     html: shell(
       `${first}, mês do seu licenciamento!`,
-      `<p>Pela placa final <strong style="color:#FAFAFA">${plateFinal}</strong>, seu licenciamento vence em <strong style="color:#FAFAFA">${monthLabel}</strong> (R$ 174,08 em 2026 — este <strong style="color:#FACC15">não é isento</strong>).</p>
+      `<p>Pela placa final <strong style="color:#FAFAFA">${plateFinal}</strong>, seu licenciamento vence em <strong style="color:#FAFAFA">${monthLabel}</strong> (taxa do Detran-PB — este <strong style="color:#FACC15">não é isento</strong>).</p>
        <p>Aproveite para emitir a certidão de débitos e manter o veículo 100% regular — pendências travam benefícios futuros.</p>`,
     ),
   });

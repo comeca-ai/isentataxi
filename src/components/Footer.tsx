@@ -28,7 +28,7 @@ export default function Footer() {
               </span>
             </Link>
             <p className="mt-4 text-sm leading-relaxed text-text-muted">
-              Isenção de IPI + ICMS para taxistas de São Paulo capital. De taxista para taxista.
+              Isenção de IPI + ICMS para taxistas da Paraíba. De taxista para taxista.
             </p>
           </div>
 
@@ -82,11 +82,11 @@ export default function Footer() {
         <div className="border-t border-border-subtle">
           <div className="mx-auto max-w-7xl px-5 py-6 md:px-8">
             <p className="text-[0.8125rem] leading-relaxed text-text-faint">
-              Sem promessa de aprovação — quem defere o benefício é o órgão público (Receita Federal / Sefaz-SP /
-              Prefeitura de SP). Nunca pedimos senha, código MFA ou sessão do Gov.br. Valores do simulador são
+              Sem promessa de aprovação — quem defere o benefício é o órgão público (Receita Federal / Sefaz-PB /
+              Prefeitura). Nunca pedimos senha, código MFA ou sessão do Gov.br. Valores do simulador são
               estimativas com base nas alíquotas vigentes.
             </p>
-            <p className="mt-4 text-[0.8125rem] text-text-faint">Feito em São Paulo © 2026 IsentaTáxi</p>
+            <p className="mt-4 text-[0.8125rem] text-text-faint">Feito para a Paraíba © 2026 IsentaTáxi</p>
           </div>
         </div>
       </div>

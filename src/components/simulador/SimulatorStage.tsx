@@ -205,7 +205,7 @@ function ManualMode({
         ))}
       </div>
       <p className="mt-3 text-[0.8125rem] text-text-faint">
-        IPI estimado: Flex 11% · Híbrido 6,5% · Elétrico 3% — ICMS SP sempre 12%.
+        IPI estimado: Flex 11% · Híbrido 6,5% · Elétrico 3% — ICMS PB sempre 12%.
       </p>
     </motion.div>
   );

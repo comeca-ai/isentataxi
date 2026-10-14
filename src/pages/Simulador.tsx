@@ -60,7 +60,7 @@ const H1_WORDS = 'QUANTO SEU PRÓXIMO TÁXI PODE SAIR MAIS BARATO?'.split(' ');
 
 const TRUST_CHIPS = [
   { icon: BadgePercent, label: 'IPI 0–13%' },
-  { icon: Landmark, label: 'ICMS SP 12%' },
+  { icon: Landmark, label: 'ICMS PB 12%' },
   { icon: Info, label: 'Estimativa, sem promessa' },
 ];
 

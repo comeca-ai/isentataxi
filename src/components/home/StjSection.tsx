@@ -43,7 +43,7 @@ export default function StjSection() {
             <p className="mt-5 max-w-lg leading-relaxed text-text-muted">
               O STJ decidiu (REsp 2.018.676, tema repetitivo): para a isenção de IPI basta ter o{' '}
               <strong className="text-text-primary">alvará municipal válido</strong> — não é preciso comprovar
-              exercício anterior da profissão. Tirou o alvará em SP? Você já pode comprar com desconto.
+              exercício anterior da profissão. Tirou o alvará na Paraíba? Você já pode comprar com desconto.
             </p>
           </RevealItem>
           <div className="mt-7 grid gap-3 sm:grid-cols-3">

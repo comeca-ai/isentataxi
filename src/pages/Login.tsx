@@ -225,7 +225,7 @@ export default function Login() {
       </div>
 
       <p className="mt-6 text-xs text-white/40 text-center max-w-xs">
-        Isenção de IPI/ICMS para taxistas de São Paulo — acompanhe seu processo
+        Isenção de IPI/ICMS para taxistas da Paraíba — acompanhe seu processo
         etapa por etapa.
       </p>
     </div>

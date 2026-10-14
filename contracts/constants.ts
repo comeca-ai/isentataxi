@@ -65,10 +65,10 @@ export const DOC_TYPES: Record<DocType, string> = {
   crlv_atual: "CRLV do veículo atual",
   comprovante_residencia: "Comprovante de residência",
   certidao_cursos: "Certidão dos cursos obrigatórios",
-  dtp_protocolo: "Protocolo DTP/SP156",
-  detran_laudo: "Laudo Detran-SP",
+  dtp_protocolo: "Atestado da Prefeitura (regularidade da permissão)",
+  detran_laudo: "Consulta/laudo Detran-PB",
   sisen_protocolo: "Protocolo SISEN (IPI)",
-  sivei_autorizacao: "Autorização SIVEI (ICMS)",
+  sivei_autorizacao: "Autorização de isenção de ICMS (Sefaz-PB)",
   nota_fiscal: "Nota fiscal do veículo",
   guia_paga_taxa: "Comprovante de guia paga (taxa do processo)",
   outros: "Outros documentos",
@@ -94,25 +94,26 @@ export type Stage = {
 export const STAGES: Stage[] = [
   { n: 1, slug: "cadastro", name: "Cadastro e pré-análise", org: "IsentaTáxi", dependsOn: [] },
   { n: 2, slug: "documentos", name: "Documentos", org: "IsentaTáxi", dependsOn: [1] },
-  { n: 3, slug: "dtp", name: "DTP/SP156", org: "Prefeitura de SP", dependsOn: [2], parallel: true },
-  { n: 4, slug: "detran", name: "Detran-SP", org: "Detran-SP", dependsOn: [2], parallel: true },
+  { n: 3, slug: "dtp", name: "Atestado da Prefeitura", org: "Prefeitura (Semob-JP / STTP-CG)", dependsOn: [2], parallel: true },
+  { n: 4, slug: "detran", name: "Detran-PB", org: "Detran-PB", dependsOn: [2], parallel: true },
   { n: 5, slug: "sisen", name: "SISEN — Receita Federal (IPI)", org: "Receita Federal", dependsOn: [3] },
-  { n: 6, slug: "sivei", name: "SIVEI — Sefaz-SP (ICMS)", org: "Sefaz-SP", dependsOn: [5] },
+  { n: 6, slug: "sivei", name: "Sefaz-PB (ICMS)", org: "Sefaz-PB", dependsOn: [5] },
   { n: 7, slug: "pos-compra", name: "Concessionária + pós-compra", org: "Concessionária", dependsOn: [6] },
-  { n: 8, slug: "ipva", name: "IPVA — isenção estadual", org: "SIVEI / Sefaz-SP", dependsOn: [7] },
+  { n: 8, slug: "ipva", name: "IPVA — isenção estadual", org: "Sefaz-PB", dependsOn: [7] },
 ];
 
-/** Alíquota de IPVA em SP para veículos de passeio (4% do valor venal/ano) */
-export const IPVA_RATE = 0.04;
+/** Alíquota de IPVA na PB para automóveis (2,5% do valor venal/ano — Lei 11.007/2017, art. 12, II) */
+export const IPVA_RATE = 0.025;
 
 /**
  * Gatilhos que baixam a isenção de IPVA automaticamente — a Sefaz cobra o IPVA
  * proporcional dos meses restantes do ano.
  */
 export const IPVA_TRIGGERS: string[] = [
-  "Venda ou transferência do veículo",
+  "Venda ou transferência do veículo (em até 2 anos para quem não tem direito, o imposto volta a ser devido)",
   "Pedido de isenção para outro veículo (só vale 1 isento por CPF)",
-  "Deixar de rodar como táxi — alvará inativo ou conversão para uso particular",
+  "Deixar de rodar como táxi — permissão municipal irregular ou conversão para uso particular",
+  "Não renovar o reconhecimento anual da isenção na Sefaz-PB",
 ];
 
 /**
@@ -128,28 +129,27 @@ export const IPVA_ZERO_KM_DEADLINE_DAYS = 30;
 /** Programa "taxista que indica ganha" — recompensa por indicado que fechar */
 export const REFERRAL_REWARD = 50;
 
-/** Licenciamento anual Detran-SP 2026 — NÃO é isento. Calendário estimado. */
+/** Licenciamento/IPVA PB 2026 — calendário por final de placa (cota única). Valor da taxa: A CONFIRMAR no Detran-PB. */
 export const LICENCIAMENTO_2026 = {
-  valor: 174.08,
+  valor: 0,
   calendario: {
-    1: "jul",
-    2: "jul",
-    3: "ago",
-    4: "ago",
-    5: "set",
-    6: "set",
-    7: "out",
-    8: "out",
-    9: "nov",
-    0: "dez",
+    1: "jan",
+    2: "fev",
+    3: "mar",
+    4: "abr",
+    5: "mai",
+    6: "jun",
+    7: "jul",
+    8: "ago",
+    9: "set",
+    0: "out",
   } as Record<number, string>,
 } as const;
 
-/** Link oficial Sefaz-SP — consulta de certidão de isenção de IPVA */
-export const SEFAZ_IPVA_URL =
-  "https://servicos.sp.gov.br/fcarta/BD28413F-2B49-4BFE-9C04-38ACAF72EAE8";
+/** Portal oficial Sefaz-PB (IPVA / isenções) */
+export const SEFAZ_IPVA_URL = "https://www.sefaz.pb.gov.br/";
 
-/** Alíquota interna de ICMS em SP */
+/** ICMS estimado embutido no preço do 0 km na PB (conservador: 12%, alíquota interestadual de origem; a interna geral da PB é 20%) — A CONFIRMAR */
 export const ICMS_RATE = 0.12;
 
 /** Alíquotas estimadas de IPI por combustível */

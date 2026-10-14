@@ -12,7 +12,7 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
 const CHIPS = [
   { icon: ShieldCheck, label: 'Sem senha Gov.br', tip: 'Nunca pedimos senha, código MFA ou sessão do Gov.br.' },
   { icon: UserCheck, label: 'Humano no processo', tip: 'Gente de verdade acompanha cada etapa com você.' },
-  { icon: MapPin, label: 'Só SP capital', tip: 'Benefício estadual de SP + alvará da Prefeitura de SP.' },
+  { icon: MapPin, label: 'Só Paraíba', tip: 'Benefício estadual da PB + alvará da Prefeitura.' },
   { icon: Lock, label: 'LGPD', tip: 'Seus documentos tratados conforme a lei de dados.' },
 ];
 
@@ -68,7 +68,7 @@ export default function Hero() {
       <div className="relative mx-auto flex w-full max-w-7xl flex-1 flex-col justify-center px-5 py-20 md:px-8">
         <div className="max-w-3xl">
           <div data-hero-rise>
-            <Eyebrow>Para taxistas de São Paulo — Capital</Eyebrow>
+            <Eyebrow>Para taxistas da Paraíba</Eyebrow>
           </div>
 
           <h1 className="mt-6 font-display text-[2.6rem] uppercase leading-[0.95] tracking-[-0.01em] text-text-primary md:text-[5rem]">
@@ -117,8 +117,8 @@ export default function Hero() {
           </h1>
 
           <p data-hero-rise className="mt-6 max-w-xl text-lg leading-relaxed text-text-muted">
-            Isenção de IPI + ICMS para taxista com alvará de SP. A gente cuida de DTP, Detran, Receita (SISEN)
-            e Sefaz (SIVEI) — você só escolhe o carro.
+            Isenção de IPI + ICMS para taxista com alvará na Paraíba. A gente cuida da Prefeitura, Detran, Receita (SISEN)
+            e Sefaz-PB — você só escolhe o carro.
           </p>
 
           <div data-hero-rise className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
