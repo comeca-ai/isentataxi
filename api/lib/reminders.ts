@@ -1,5 +1,5 @@
 import { and, isNotNull, eq } from "drizzle-orm";
-import { LICENCIAMENTO_2026, IPVA_ZERO_KM_DEADLINE_DAYS } from "@contracts/constants";
+import { LICENCIAMENTO_2026, IPVA_ZERO_KM_DEADLINE_DAYS, MONTH_LABEL, MONTH_NUM } from "@contracts/constants";
 import { emailReminders, profiles, users } from "@db/schema";
 import { getDb } from "../queries/connection";
 import { sendIpvaDeadlineEmail, sendLicenciamentoEmail } from "./email";
@@ -8,16 +8,6 @@ import { sendIpvaDeadlineEmail, sendLicenciamentoEmail } from "./email";
  * Lembretes automáticos por e-mail — roda no boot e a cada 24h.
  * Dedup pela tabela email_reminders (userId + kind + refKey): nunca repete.
  */
-
-const MONTH_LABEL: Record<string, string> = {
-  jul: "julho",
-  ago: "agosto",
-  set: "setembro",
-  out: "outubro",
-  nov: "novembro",
-  dez: "dezembro",
-};
-const MONTH_NUM: Record<string, number> = { jul: 7, ago: 8, set: 9, out: 10, nov: 11, dez: 12 };
 
 async function alreadySent(userId: number, kind: string, refKey: string): Promise<boolean> {
   const db = getDb();

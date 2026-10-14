@@ -129,6 +129,36 @@ export const IPVA_ZERO_KM_DEADLINE_DAYS = 30;
 /** Programa "taxista que indica ganha" — recompensa por indicado que fechar */
 export const REFERRAL_REWARD = 50;
 
+/** Mês (abreviado, pt-BR) → número (1–12) e nome por extenso. Cobre o ano todo para qualquer calendário de licenciamento. */
+export const MONTH_NUM: Record<string, number> = {
+  jan: 1,
+  fev: 2,
+  mar: 3,
+  abr: 4,
+  mai: 5,
+  jun: 6,
+  jul: 7,
+  ago: 8,
+  set: 9,
+  out: 10,
+  nov: 11,
+  dez: 12,
+};
+export const MONTH_LABEL: Record<string, string> = {
+  jan: "janeiro",
+  fev: "fevereiro",
+  mar: "março",
+  abr: "abril",
+  mai: "maio",
+  jun: "junho",
+  jul: "julho",
+  ago: "agosto",
+  set: "setembro",
+  out: "outubro",
+  nov: "novembro",
+  dez: "dezembro",
+};
+
 /** Licenciamento/IPVA PB 2026 — calendário por final de placa (cota única). Valor da taxa: A CONFIRMAR no Detran-PB. */
 export const LICENCIAMENTO_2026 = {
   valor: 0,
